@@ -1,0 +1,96 @@
+{% load static %}
+
+{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="description" content="Tangle Forum">
+    <meta name="author" content="">
+    <meta name="keywords" content="forum, django, python3, bootstrap, tangle">
+    <meta name="robots" content="index, follow">
+    <link rel="shortcut icon" href="{% static 'images/favicon_io/favicon.ico' %}" type="image/x-icon">
+    <title>Tangle</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'bs/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+    <style>
+    </style>
+</head>
+<body>
+
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+
+    {% block body %} {% endblock %}
+
+    <!-- jQuery -->
+    <script src="{% static 'bs/js/jquery.min.js' %}"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="{% static 'bs/js/bootstrap.min.js' %}"></script>
+
+    <!-- jQuery Validation plugin -->
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script>
+        console.log('Inline JavaScript loaded');  // Inline JS for debugging
+
+        $(document).ready(function() {
+            $('#like-section form').on('submit', function(event) {
+                event.preventDefault();  // Stop the form from submitting normally
+                var threadId = $('input[name="thread_id"]').val();  // Get the thread ID from the hidden input
+                var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // CSRF token for POST request
+
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),  // Use the action URL from the form itself
+                    data: {
+                        'thread_id': threadId,
+                        'csrfmiddlewaretoken': csrfToken
+                    },
+                    success: function(response) {
+                        $('#like-count').text(response.total_likes + ' Likes');  // Update the like count
+                        // Optionally update the button based on the new state
+                        var button = $('#like-section button');
+                        if (response.is_liked) {
+                            button.removeClass('btn-primary').addClass('btn-danger').text('Dislike');
+                        } else {
+                            button.removeClass('btn-danger').addClass('btn-primary').text('Like');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error: " + error);  // Log errors
+                    }
+                });
+            });
+
+            $("#reveal-btn").click(function(){
+                $(".hidden-content").slideToggle();
+                $(this).text(function(i, text){
+                    return text === "Show Threads" ? "Hide Threads" : "Show Threads";
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
