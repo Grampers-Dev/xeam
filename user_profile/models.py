@@ -9,7 +9,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    image = CloudinaryField('image', blank=True, null=True)
+    image = CloudinaryField('image', default='https://res.cloudinary.com/dhx65uemx/image/upload/v1716398543/anftfroi95huytw9tnv5.png')
 
     def __str__(self):
         return self.user.username

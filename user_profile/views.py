@@ -42,7 +42,7 @@ def register(request):
             return redirect('login')
     else:
         form = ExtendedUserCreationForm()
-    return render(request, 'user_profile/register.html', {'form': form})
+    return render(request, 'users/register.html', {'form': form})
 
 
 @login_required

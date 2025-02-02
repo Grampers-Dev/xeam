@@ -14,6 +14,9 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 #import dj_database_url
 
 # Load environment variables from .env file
@@ -144,8 +147,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Ensure you have these settings as well
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Your development static files
+    os.path.join(BASE_DIR, 'static'),  # Instead of 'xeam/static'
 ]
 
 # Default primary key field type
