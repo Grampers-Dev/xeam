@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from . import views
+from . import views, views
 from .forms import ExtendedAuthenticationForm
 #from allauth.account.views import (
 #    PasswordResetView, 
@@ -10,6 +10,7 @@ from .forms import ExtendedAuthenticationForm
 #)
 
 urlpatterns = [
+    path('index/', views.index, name='index'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name=

@@ -97,6 +97,14 @@ CLOUDINARY_STORAGE = {
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # Use 465 for SSL
+EMAIL_USE_TLS = True  # Use TLS for a secure connection
+EMAIL_HOST_USER = 'tangleforum.info@gmail.com'  # Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'zqipzxbkykywqrwo'  
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

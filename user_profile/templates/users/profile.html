@@ -1,0 +1,130 @@
+{% extends 'users/base.html' %}
+{% block body %}
+{% load static %}
+{% load cloudinary %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-lg-offset-0">
+            <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="https://res.cloudinary.com/dhx65uemx/image/upload/v1715630230/Tangle_hokbbr.svg" alt="Tangle Logo" class="logo-main">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'index' %}">
+                                <i class="fas fa-home"></i> Home
+                            </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile' %}">
+                                <i class="far fa-user"></i> Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Display the page title and the number of threads from the database -->
+            <div class="pageTitle">My Profile</div>
+
+            <div class="container">
+                <div class="row pad">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">My Info <i class="fas fa-info-circle"></i></h3>
+                            </div>
+                            {% if request.user.user_profile.image %}
+                            <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}" class="profile-image">
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
+                        {{ request.user.username }}
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Bio: <strong>{{ object.bio }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Location: <strong>{{ object.location }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Birth Date: <strong>{{ object.birth_date }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Email: <strong>{{ user.email }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Username: <strong>{{ user.username }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Num of Posts: <strong>{{ user.reply_set.count }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Join Date: <strong>{{ user.date_joined }}</strong>
+                                </li>
+                            </ul>
+                            <button id="editProfileBtn" class="btn btn-primary" title="Edit Profile">Edit Profile</button>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Hidden Form -->
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                <div id="editProfileForm" style="display: none;">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="center">
+                    Copyright &copy; 2024 Tangle. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+        document.getElementById('editProfileBtn').addEventListener('click', function() {
+            var form = document.getElementById('editProfileForm');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                this.textContent = 'Cancel';
+            } else {
+                form.style.display = 'none';
+                this.textContent = 'Edit Profile';
+            }
+        });
+</script>
+
+{% endblock %}

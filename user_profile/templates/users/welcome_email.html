@@ -1,0 +1,18 @@
+{% load i18n %}
+
+{% blocktrans with username=user.username %}
+    Hello, {{ username }}! Welcome to Tangle.
+{% endblocktrans %}
+
+<p>{% trans "Thank you for joining our community." %}</p>
+
+{% blocktrans %}
+    Feel free to explore the site and start posting your thoughts.
+{% endblocktrans %}
+
+<p>{% trans "Happy Tangling!" %}</p>
+
+{% blocktrans %}
+    Best,
+    The Tangle Team
+{% endblocktrans %}

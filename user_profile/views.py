@@ -8,9 +8,53 @@ from .forms import ExtendedUserCreationForm
 from django.contrib import messages
 #from forum.models import Profile
 #from cloudinary.forms import cl_init_js_callbacks      
-#from .forms import ProfileForm
-from user_profile.models import Profile 
+from .forms import ProfileForm
+from user_profile.models import Profile, Post
 from django.contrib.auth.forms import PasswordResetForm
+from django.http import HttpResponse
+from django.views.generic import DetailView
+
+def index(request):
+    """
+    View for the home page.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object.
+    """
+    return render(request, 'users/index.html')
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = 'index.html'  # Replace 'post_detail.html' with the name of your template
+    context_object_name = 'post'  # This will be the variable name used in the template to access the post object
+    DetailView.queryset = Post.objects.filter(status=1)
+    DetailView.template_name = 'index.html'
+    DetailView.context_object_name = 'post'
+    DetailView.slug_field = 'slug'
+    DetailView.slug_url_kwarg = 'slug'
+    DetailView.query_pk_and_slug = False
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = Post.objects.filter(status=1)
+        return context
+    
+    def get_queryset(self):
+        return Post.objects.filter(status=1)
+    
+    def get_object(self):
+        return Post.objects.filter(status=1)
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html')
+    
+    def post(self, request, *args, **kwargs):
+        return render(request, 'index.html')
+
+
 
 
 def register(request):
@@ -34,7 +78,7 @@ def register(request):
             #Send welcome email to the newly registered user
             subject = 'Welcome to Tangle!'
             context = {'username': user.username}  # Pass any additional context variables needed for the email template
-            html_message = render_to_string('user_profile/welcome_email.html', context)
+            html_message = render_to_string('users/welcome_email.html', context)
             plain_message = strip_tags(html_message)
             send_mail(subject, plain_message, 'tangleforum.info@gmail.com', [user.email], html_message=html_message)
 
@@ -57,7 +101,7 @@ def profile(request):
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, 'user_profile/profile.html', {'form': form, 'object': profile})
+    return render(request, 'users/profile.html', {'form': form, 'object': profile})
 
 
 def custom_login(request):

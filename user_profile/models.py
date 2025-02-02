@@ -22,3 +22,46 @@ class Photo(models.Model):
 
     def __str__(self):
         return f"Photo {self.id} - {self.description[:20]}"
+    
+STATUS = ((0, "Draft"), (1, "Published"))
+
+# Create your models here.
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="posts"
+    )
+    content = models.TextField(
+        max_length=2000,
+        help_text="Write your blog content here"
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(choices=STATUS, default=0)
+    excerpt = models.TextField(blank=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_on"]
+
+    def __str__(self):
+        return f"{self.title} | written by {self.author}"
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="commenter")
+    body = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return f"Comment {self.body} by {self.author}"
