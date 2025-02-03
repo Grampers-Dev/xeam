@@ -2,6 +2,21 @@
 {% block body %}
 {% load static %}
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
+            <div class="logo">
+                <div>
+
+                        <img src="https://res.cloudinary.com/dhx65uemx/image/upload/v1715630230/Tangle_hokbbr.svg" alt="Tangle Logo" class="logo-image">
+                    </a>
+                </div>
+            </div>
+            <div class="pageTitle">Welcome to XEAM</div>
+        </div>
+    </div>
+</div>
+
 <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -29,134 +44,243 @@
     </div>
 </nav>
 
-<div class="masthead">
-    <div class="container">
-        <div class="row g-0">
-            <div class="col-md-6 masthead-text">
-                <!-- Post title goes in these h1 tags -->
-                <h1 class="post-title">{{ post.title }}</h1>
-                <!-- Post author goes before the | the post's created date goes after -->
-                <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
-            </div>
-            <div class="d-none d-md-block col-md-6 masthead-image">
-                {% if "placeholder" in post.featured_image.url %}
-                <img src="{% static 'images/default.jpg' %}" class="scale" alt="placeholder">
-                {% else %}
-                <img src="{{ post.featured_image.url }}" class="scale" alt="{{ post.title }}">
-                {% endif %}
-            </div>
+<div class="container-fluid callout-container">
+    <!-- Callout -->
+    <div class="row">
+        <div class="col-12">
+            <section class="callout jumbotron text-center">
+                <h1 class="jumbotron-header">Blockchain Analytics!</h1>
+                <hr class="block-divider block-divider--orange">
+                <p class="lead">Sign up today to get access to our blockchain analytics service!</p>
+                    <s class="d-none d-sm-inline">€19.99</s>
+                    <span class="d-inline d-sm-none"><br></span>
+                    <strong><mark>First month is free!</mark></strong></p>
+                    <button  id="signUpButton" type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up!</button>
+                <p class="text-muted"><small>You must be over 18 to sign up to our service. Not Financle Advive</small></p>
+            </section>
         </div>
     </div>
-</div>
+    <!-- /.callout -->
+</div>    
 
-<div class="container">
+    <!-- Add more content as needed -->
     <div class="row">
-        <div class="col card mb-4  mt-3 left  top">
-            <div class="card-body">
-                <!-- The post content goes inside the card-text. -->
-                <!-- Use the | safe filter inside the template tags -->
-                <p class="card-text">
-                    {{ post.content | safe }}
-                </p>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature">
+                <h3><i class="fas fa-cogs d-none d-sm-block"></i> Feature 1 <span class="badge badge-success">NEW!</span></h3>
+                <h3>Enables connection to MetaMask:</h3>
+                <p>Initialises Contract:</p>
+                <p>Provides link for installation</p>
+                <button id="enableEthereumButton" class="btn btn-primary">Enable Ethereum</button>
+                <div id="metamaskInstallMessage"></div>
+                <div id="successMessage"></div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <strong class="text-secondary">
-                <i class="far fa-comments"></i> {{ comment_count }}
-            </strong>
-        </div>
-        <div class="col-12">
-            <hr>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 card mb-4  mt-3 ">
-            <h3>Comments:</h3>
-            <div class="card-body">
-                <!-- We want a for loop inside the empty control tags to iterate through each comment in comments -->
-                {% for comment in comments %}
-                <div
-                    class="p-2 comments{% if not comment.approved and comment.author == user %} faded{% elif not comment.approved %} d-none{% endif %}">
-                    <p class="font-weight-bold">
-                        {{ comment.author }}
-                        <span class="font-weight-normal">
-                            {{ comment.created_on }}
-                        </span> wrote:
-                    </p>
-                    <div id="comment{{ comment.id }}">
-                        {{ comment.body | linebreaks }}
-                    </div>
-                    {% if not comment.approved and comment.author == user %}
-                    <p class="approval">This comment is awaiting approval</p>
-                    {% endif %}
-                    {% if user.is_authenticated and comment.author == user %}
-                    <button class="btn btn-delete" comment_id="{{ comment.id }}">Delete</button>
-                    <button class="btn btn-edit" comment_id="{{ comment.id }}">Edit</button>
-                    {% endif %}
-                </div>
-                <!-- Our for loop ends here -->
-                {% endfor %}
-            </div>
-        </div>
-        <div class="col-md-4 card mb-4 mt-3">
-            <div class="card-body">
-                {% if user.is_authenticated %}
-                    <h3>Leave a comment:</h3>
-                    <p>Posting as: {{ user.username }}</p>
-                    <form id="commentForm" method="post" style="margin-top: 1.3em;">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="id_content" class="form-label">Content:</label>
-                            <textarea id="id_content" name="content" class="form-control" rows="3" required></textarea>
-                        
-                         <!-- Add other form fields as needed -->
-                         <textarea id="id_body" name="body" class="form-control" rows="3" required>
-                         <input type="hidden" name="post_id" value="{{ post.id }}">
-                         <input type="hidden" name="author" value="{{ user.username }}">
-                         <input type="hidden" name="author_email" value="{{ user.email }}">
-                         <input type="hidden" name="approved" value="False">
-                         <input type="hidden" name="created_on" value="{{ post.created_on }}">
-                         <input type="hidden" name="updated_on" value="{{ post.updated_on }}">
-                         <input type="hidden" name="parent" value="None">
-                         <input type="hidden" name="reply_to" value="None">
-                         <input type="hidden" name="reply_to_author" value="None">
-                         <input type="hidden" name="reply_to_author_email" value="None">
-                         <input type="hidden" name="reply_to_id" value="None">
-                         <input type="hidden" name="reply_to_created_on" value="None">
-                         <input type="hidden" name="reply_to_updated_on" value="None">
-                         <input type="hidden" name="reply_to_approved" value="None">
-                         <input type="hidden" name="reply_to_parent" value="None">
-                         <input type="hidden" name="reply_to_reply_to" value="None">
-                         <button id="submitButton" type="submit" class="btn btn-signup btn-lg">Submit</button></textarea>
-                        </div>
-                    </form>
-                {% else %}
-                    <p>Log in to leave a comment</p>
-                {% endif %}
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature">
+                <h3><i class="far fa-chart-bar d-none d-sm-block"></i> Feature 2</h3>
+                <h3>Claim Identity via Smart Contract Interation:</h3>
+                <p>Processes transaction:</p>
+                <p>Claimed address loged on the Mumbai Test Network:</p>
+                <button id="btnClaimIdentity" class="btn btn-secondary">Claim Identity</button>
+                <p id="alreadyClaimedMessage" class="text-warning"></p>
+                <div id="successMessage"></div>
             </div>
         </div>
         
+        <div class="col-12 d-md-none d-lg-block col-lg-4">
+            <div class="feature">
+                <h3><i class="fas fa-history d-none d-sm-block"></i> Feature 3</h3>
+                <h3>Request Test Tokens:</h3>
+                <p>Users sends the admin a request for Matic Test Tokens:</p>
+                <p>Test tokens are sent to the users wallet:</p>
+                <form id="requestTokensForm">
+                    <input type="text" id="walletAddress" placeholder="Enter wallet address">
+                    <button type="submit" class="btn btn-primary">Request Tokens</button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-<!-- Delete confirmation modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+
+
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature">
+                <h3><i class="fas fa-cogs d-none d-sm-block"></i> Feature 4 <span class="badge badge-success">NEW!</span></h3>
+                <h3>Enables users to Unclaim address:</h3>
+                <p>Description: This feature allows users to unclaim an address, presumably from a smart contract.</p>
+                <p>Steps:</p>
+                <ol>
+                    <li>Initialization: The contract associated with the unclaim process needs to be initialized.</li>
+                    <li>Interaction with Smart Contract: The user initiates an interaction with the smart contract to perform the unclaim action.</li>
+                    <li>Unclaim Process: The smart contract executes the unclaim process, removing the claimed status from the address.</li>
+                </ol>
+                <p>Explanation:</p>
+                <ul>
+                    <li>Initializing the contract ensures that the JavaScript application can interact with the smart contract.</li>
+                    <li>Interacting with the smart contract involves calling the appropriate function/method to trigger the unclaim process.</li>
+                    <li>The unclaim process within the smart contract likely involves updating the contract's state to reflect that the address is no longer claimed.</li>
+                </ul>
+                <button id="btnUnclaim" class="btn btn-secondary">Unclaim Address</button>
+            </div>
+        </div>            
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="feature">
+                <h3><i class="far fa-chart-bar d-none d-sm-block"></i> Feature 2</h3>
+                <h3>Claim Identity via Smart Contract Interation:</h3>
+                <p>Processes transaction:</p>
+                <p>Claimed address loged on the Mumbai Test Network:</p>
+                <button id="btnClaimIdentity" class="btn btn-secondary">Claim Identity</button>
+                <p id="alreadyClaimedMessage" class="text-warning"></p>
+                <div id="successMessage"></div>
+            </div>
+        </div>
+        
+        <div class="col-12 d-md-none d-lg-block col-lg-4">
+            <div class="feature">
+                <h3><i class="fas fa-history d-none d-sm-block"></i> Feature 3</h3>
+                <h3>Request Test Tokens:</h3>
+                <p>Users sends the admin a request for Matic Test Tokens:</p>
+                <p>Test tokens are sent to the users wallet:</p>
+                <form id="requestTokensForm">
+                    <input type="text" id="walletAddress" placeholder="Enter wallet address">
+                    <button type="submit" class="btn btn-primary">Request Tokens</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     <!-- Information List Section -->
+     <div class="accordion mt-4" id="infoAccordion">
+         <div class="accordion-item">
+             <h2 class="accordion-header" id="headingInfo">
+                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo" aria-expanded="false" aria-controls="collapseInfo">
+                     How It Works
+                 </button>
+             </h2>
+             <div id="collapseInfo" class="accordion-collapse collapse" aria-labelledby="headingInfo" data-bs-parent="#infoAccordion">
+                 <div class="accordion-body">
+                     <p>Once you submit your wallet address, here's what happens:</p>
+                     <ul>
+                         <li>Your request is sent to our site administrators.</li>
+                         <li>An admin reviews your request for test Matic tokens.</li>
+                         <li>Upon approval, an admin will send the test tokens to the provided wallet address.</li>
+                         <li>You will receive a confirmation email once the tokens have been dispatched.</li>
+                         <li>Please allow up to 24 hours for the tokens to reflect in your wallet.</li>
+                     </ul>
+                     <p class="text-muted">Note: This service is only for testing purposes and the tokens have no real-world value.</p>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ 
+ <div class="container my-5">
+    <div class="card">
+        <div class="card-header">
+            Connect to Mumbai Network
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Network Details</h5>
+            <p class="card-text">
+                <strong>Network Name:</strong> Mumbai<br>
+                <strong>New RPC URL:</strong> <a href="https://rpc-mumbai.maticvigil.com" target="_blank" rel="noopener">https://rpc-mumbai.maticvigil.com</a><br>
+                <strong>Chain ID:</strong> 80001<br>
+                <div class="alert alert-danger mt-2">Note: If you encounter the message "Could not fetch chain ID. Is your RPC URL correct?" please double-check the RPC URL for accuracy.</div>
+                <strong>Currency Symbol:</strong> MATIC<br>
+                <div class="alert alert-warning mt-2">Important: Ticker symbol verification data is currently unavailable. Please ensure that the symbol you have entered is correct as it will impact the conversion rates displayed for this network.</div>
+                <a href="https://mumbai.polygonscan.com" target="_blank" rel="noopener">https://mumbai.polygonscan.com</a>
+            </p>
+        </div>
+    </div>
+ </div>
+
+ <hr class="block-divider block-divider--orange">
+
+ <div id="signUpModal"class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Sign Up To Identity Protocol!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete your comment? This action cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
+                <form>
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
+                    </div>
+                
+                    <!-- Email Address -->
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                
+                    <!-- Repeat Password -->
+                    <div class="form-group">
+                        <label for="repeatPassword">Repeat Password</label>
+                        <input type="password" class="form-control" id="repeatPassword" placeholder="Repeat Password">
+                    </div>
+                
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Format: 123-456-7890">
+                    </div>
+                
+                    <!-- Date of Birth -->
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob">
+                    </div>
+                
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Street address">
+                        <!-- Additional fields for city, state, and zip code can be added here -->
+                    </div>
+                
+                    <!-- Gender Selection -->
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div>
+                            <input type="radio" id="male" name="gender" value="male">
+                            <label for="male">Male</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">Female</label>
+                        </div>
+                        <!-- Additional options or 'Prefer not to say' -->
+                    </div>
+                
+                    <!-- Terms and Conditions Checkbox -->
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="termsCheck">
+                        <label class="form-check-label" for="termsCheck">I agree to the Terms and Conditions</label>
+                    </div>
+                
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+                
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

@@ -8,9 +8,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-
-            </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
@@ -20,8 +17,8 @@
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">
-                    <i class="fas fa-book"></i> Register
+                <a class="nav-link" href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </a>
             </li>
             {% endif %}
@@ -31,7 +28,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4 col-lg-offset-4" id="loginBlock">
+        <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
             <div class="logo">
                 <div>
 
