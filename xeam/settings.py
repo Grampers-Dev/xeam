@@ -39,6 +39,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CSP_DEFAULT_SRC = ("'self'", "https://cdn.jsdelivr.net", "https://metamask.io")
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://metamask.io")
+
+
 
 # Application definition
 

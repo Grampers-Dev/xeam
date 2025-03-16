@@ -2,285 +2,125 @@
 {% block body %}
 {% load static %}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
-            <div class="logo">
-                <div>
 
-                        <img src="https://res.cloudinary.com/dhx65uemx/image/upload/v1715630230/Tangle_hokbbr.svg" alt="Tangle Logo" class="logo-image">
-                    </a>
-                </div>
-            </div>
-            <div class="pageTitle">Welcome to XEAM</div>
-        </div>
-    </div>
-</div>
+<nav class="navbar">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1738699609/wltspztyxldd6yzqpb25.jpg" alt="XEAM Token Logo" class="logo-main">
+        XEAM Token
+    </a>
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-
-            </li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">
-                    <i class="fas fa-book"></i> Register
-                </a>
-            </li>
-            {% endif %}
-        </ul>
+    <div class="navbar-buttons">
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
+        <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+        <button class="connect-wallet">Connect Wallet</button>
     </div>
 </nav>
 
-<div class="container-fluid callout-container">
-    <!-- Callout -->
+<div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-            <section class="callout jumbotron text-center">
-                <h1 class="jumbotron-header">Blockchain Analytics!</h1>
-                <hr class="block-divider block-divider--orange">
-                <p class="lead">Sign up today to get access to our blockchain analytics service!</p>
-                    <s class="d-none d-sm-inline">€19.99</s>
-                    <span class="d-inline d-sm-none"><br></span>
-                    <strong><mark>First month is free!</mark></strong></p>
-                    <button  id="signUpButton" type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up!</button>
-                <p class="text-muted"><small>You must be over 18 to sign up to our service. Not Financle Advive</small></p>
-            </section>
-        </div>
-    </div>
-    <!-- /.callout -->
-</div>    
+        <!-- Logo Block with Animation -->
 
-    <!-- Add more content as needed -->
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="feature">
-                <h3><i class="fas fa-cogs d-none d-sm-block"></i> Feature 1 <span class="badge badge-success">NEW!</span></h3>
-                <h3>Enables connection to MetaMask:</h3>
-                <p>Initialises Contract:</p>
-                <p>Provides link for installation</p>
-                <button id="enableEthereumButton" class="btn btn-primary">Enable Ethereum</button>
-                <div id="metamaskInstallMessage"></div>
-                <div id="successMessage"></div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="feature">
-                <h3><i class="far fa-chart-bar d-none d-sm-block"></i> Feature 2</h3>
-                <h3>Claim Identity via Smart Contract Interation:</h3>
-                <p>Processes transaction:</p>
-                <p>Claimed address loged on the Mumbai Test Network:</p>
-                <button id="btnClaimIdentity" class="btn btn-secondary">Claim Identity</button>
-                <p id="alreadyClaimedMessage" class="text-warning"></p>
-                <div id="successMessage"></div>
-            </div>
-        </div>
-        
-        <div class="col-12 d-md-none d-lg-block col-lg-4">
-            <div class="feature">
-                <h3><i class="fas fa-history d-none d-sm-block"></i> Feature 3</h3>
-                <h3>Request Test Tokens:</h3>
-                <p>Users sends the admin a request for Matic Test Tokens:</p>
-                <p>Test tokens are sent to the users wallet:</p>
-                <form id="requestTokensForm">
-                    <input type="text" id="walletAddress" placeholder="Enter wallet address">
-                    <button type="submit" class="btn btn-primary">Request Tokens</button>
-                </form>
-            </div>
-        </div>
     </div>
 
-
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="feature">
-                <h3><i class="fas fa-cogs d-none d-sm-block"></i> Feature 4 <span class="badge badge-success">NEW!</span></h3>
-                <h3>Enables users to Unclaim address:</h3>
-                <p>Description: This feature allows users to unclaim an address, presumably from a smart contract.</p>
-                <p>Steps:</p>
-                <ol>
-                    <li>Initialization: The contract associated with the unclaim process needs to be initialized.</li>
-                    <li>Interaction with Smart Contract: The user initiates an interaction with the smart contract to perform the unclaim action.</li>
-                    <li>Unclaim Process: The smart contract executes the unclaim process, removing the claimed status from the address.</li>
-                </ol>
-                <p>Explanation:</p>
-                <ul>
-                    <li>Initializing the contract ensures that the JavaScript application can interact with the smart contract.</li>
-                    <li>Interacting with the smart contract involves calling the appropriate function/method to trigger the unclaim process.</li>
-                    <li>The unclaim process within the smart contract likely involves updating the contract's state to reflect that the address is no longer claimed.</li>
-                </ul>
-                <button id="btnUnclaim" class="btn btn-secondary">Unclaim Address</button>
-            </div>
-        </div>            
-
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="feature">
-                <h3><i class="far fa-chart-bar d-none d-sm-block"></i> Feature 2</h3>
-                <h3>Claim Identity via Smart Contract Interation:</h3>
-                <p>Processes transaction:</p>
-                <p>Claimed address loged on the Mumbai Test Network:</p>
-                <button id="btnClaimIdentity" class="btn btn-secondary">Claim Identity</button>
-                <p id="alreadyClaimedMessage" class="text-warning"></p>
-                <div id="successMessage"></div>
-            </div>
+    <!-- HERO SECTION (Inside the Animated Container) -->
+    <section class="hero-section">
+        <div class="hero-text">
+            <h1>Discover In-depth Tokenomics</h1>
+            <p>Real-time price analysis and historical comparisons.</p>
+            <button class="btn">Contact Us</button>
         </div>
-        
-        <div class="col-12 d-md-none d-lg-block col-lg-4">
-            <div class="feature">
-                <h3><i class="fas fa-history d-none d-sm-block"></i> Feature 3</h3>
-                <h3>Request Test Tokens:</h3>
-                <p>Users sends the admin a request for Matic Test Tokens:</p>
-                <p>Test tokens are sent to the users wallet:</p>
-                <form id="requestTokensForm">
-                    <input type="text" id="walletAddress" placeholder="Enter wallet address">
-                    <button type="submit" class="btn btn-primary">Request Tokens</button>
-                </form>
+        <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
+            <div class="logo">
+                <div>
+                    <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1738699609/wltspztyxldd6yzqpb25.jpg" 
+                         alt="Tangle Logo" class="logo-image">
+                </div>
             </div>
+            <div class="pageTitle"></div> <!-- Keeps background & animations -->
         </div>
-    </div>
-
-     <!-- Information List Section -->
-     <div class="accordion mt-4" id="infoAccordion">
-         <div class="accordion-item">
-             <h2 class="accordion-header" id="headingInfo">
-                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo" aria-expanded="false" aria-controls="collapseInfo">
-                     How It Works
-                 </button>
-             </h2>
-             <div id="collapseInfo" class="accordion-collapse collapse" aria-labelledby="headingInfo" data-bs-parent="#infoAccordion">
-                 <div class="accordion-body">
-                     <p>Once you submit your wallet address, here's what happens:</p>
-                     <ul>
-                         <li>Your request is sent to our site administrators.</li>
-                         <li>An admin reviews your request for test Matic tokens.</li>
-                         <li>Upon approval, an admin will send the test tokens to the provided wallet address.</li>
-                         <li>You will receive a confirmation email once the tokens have been dispatched.</li>
-                         <li>Please allow up to 24 hours for the tokens to reflect in your wallet.</li>
-                     </ul>
-                     <p class="text-muted">Note: This service is only for testing purposes and the tokens have no real-world value.</p>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
-
- 
- <div class="container my-5">
-    <div class="card">
-        <div class="card-header">
-            Connect to Mumbai Network
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Network Details</h5>
-            <p class="card-text">
-                <strong>Network Name:</strong> Mumbai<br>
-                <strong>New RPC URL:</strong> <a href="https://rpc-mumbai.maticvigil.com" target="_blank" rel="noopener">https://rpc-mumbai.maticvigil.com</a><br>
-                <strong>Chain ID:</strong> 80001<br>
-                <div class="alert alert-danger mt-2">Note: If you encounter the message "Could not fetch chain ID. Is your RPC URL correct?" please double-check the RPC URL for accuracy.</div>
-                <strong>Currency Symbol:</strong> MATIC<br>
-                <div class="alert alert-warning mt-2">Important: Ticker symbol verification data is currently unavailable. Please ensure that the symbol you have entered is correct as it will impact the conversion rates displayed for this network.</div>
-                <a href="https://mumbai.polygonscan.com" target="_blank" rel="noopener">https://mumbai.polygonscan.com</a>
-            </p>
-        </div>
-    </div>
- </div>
-
- <hr class="block-divider block-divider--orange">
-
- <div id="signUpModal"class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Sign Up To Identity Protocol!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <!-- Full Name -->
-                    <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
-                    </div>
-                
-                    <!-- Email Address -->
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-                
-                    <!-- Password -->
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password">
-                    </div>
-                
-                    <!-- Repeat Password -->
-                    <div class="form-group">
-                        <label for="repeatPassword">Repeat Password</label>
-                        <input type="password" class="form-control" id="repeatPassword" placeholder="Repeat Password">
-                    </div>
-                
-                    <!-- Phone Number -->
-                    <div class="form-group">
-                        <label for="phoneNumber">Phone Number</label>
-                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Format: 123-456-7890">
-                    </div>
-                
-                    <!-- Date of Birth -->
-                    <div class="form-group">
-                        <label for="dob">Date of Birth</label>
-                        <input type="date" class="form-control" id="dob">
-                    </div>
-                
-                    <!-- Address -->
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="Street address">
-                        <!-- Additional fields for city, state, and zip code can be added here -->
-                    </div>
-                
-                    <!-- Gender Selection -->
-                    <div class="form-group">
-                        <label>Gender</label>
-                        <div>
-                            <input type="radio" id="male" name="gender" value="male">
-                            <label for="male">Male</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="female" name="gender" value="female">
-                            <label for="female">Female</label>
-                        </div>
-                        <!-- Additional options or 'Prefer not to say' -->
-                    </div>
-                
-                    <!-- Terms and Conditions Checkbox -->
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="termsCheck">
-                        <label class="form-check-label" for="termsCheck">I agree to the Terms and Conditions</label>
-                    </div>
-                
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-success">Submit</button>
-                </form>
-                
-            </div>
-        </div>
-    </div>
+    </section>
 </div>
+
+
+<!-- WHY XEAM SECTION -->
+<section class="features-container">
+    <div class="feature">
+        <h2>Why XEAM?</h2>
+        <p>Supporting NGOs & food banks through blockchain-powered passive income.</p>
+    </div>
+</section>
+
+<!-- STEPS TO TRADE -->
+<section class="steps-to-trade">
+    <h2>Steps to Trade</h2>
+    <ul>
+        <li>01 Create an account</li>
+        <li>02 Download platform</li>
+        <li>03 Select crypto</li>
+        <li>04 Start trading</li>
+    </ul>
+</section>
+
+<!-- TOKENOMICS -->
+<section class="container my-5">
+    <div class="card">
+        <div class="card-header">XEAM Tokenomics</div>
+        <div class="card-body">
+            <h5>How Does XEAM Work?</h5>
+            <p>XEAM Token has a total supply of 2M with allocations for development, staking, and the Encouragement Fund.</p>
+            <ul>
+                <li><strong>Encouragement Fund:</strong> 4% of each transaction goes to NGOs.</li>
+                <li><strong>Liquidity Pool:</strong> 50%</li>
+                <li><strong>Marketing & Development:</strong> 22.2%</li>
+                <li><strong>Staking:</strong> 14.1%</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="container my-5">
+    <div class="card">
+        <div class="card-header">XEAM Roadmap</div>
+        <div class="card-body">
+            <h5>Future Plans</h5>
+            <ul>
+                <li>🚀 Website & whitepaper launch</li>
+                <li>💰 XEAM Token deployment</li>
+                <li>📈 Staking & DAO governance</li>
+                <li>🎨 NFT Series launch</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- CALL TO ACTION -->
+<section class="contact-form">
+    <h2>Join the XEAM Movement</h2>
+    <p>Support charitable causes and be part of decentralized finance.</p>
+    <a href="https://uniswap.org" target="_blank" class="btn">Get XEAM Token</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div>
+        <h5>Token Radar</h5>
+        <p>Revolutionizing crypto analytics and blockchain transparency.</p>
+    </div>
+    <div class="footer-links">
+        <h5>Links</h5>
+        <a href="#">How it works</a><br>
+        <a href="#">Cryptos</a><br>
+        <a href="#">Features</a><br>
+    </div>
+    <div>
+        <h5>Newsletter</h5>
+        <input type="email" placeholder="Enter your email">
+        <button class="subscribe-btn">Subscribe</button>
+    </div>
+</footer>
 {% endblock %}
