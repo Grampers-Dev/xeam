@@ -1,9 +1,36 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    const enableEthereumButton = document.getElementById("enableEthereumButton");
+    const enableEthereumButton = document.getElementById("connect-wallet");
     const claimButton = document.getElementById("btnClaimIdentity");
     const successMessage = document.getElementById("successMessage");
     const requestTokensForm = document.getElementById('requestTokensForm');
     const metamaskInstallMessage = document.getElementById('metamaskInstallMessage');
+
+    // Define a separate function for connecting the wallet
+    async function connectWallet() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                // Request access to the user's Ethereum account(s)
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                
+                if (accounts.length > 0) {
+                    const address = accounts[0];
+                    // Shorten the address: first 2 characters and last 4 characters
+                    const shortenedAddress = address.substring(0, 2) + "..." + address.substring(address.length - 4);
+                    
+                    // Update the button text to show the shortened address
+                    enableEthereumButton.textContent = shortenedAddress;
+                }
+            } catch (error) {
+                console.error("User denied account access or an error occurred:", error);
+            }
+        } else {
+            console.error("No Ethereum provider found. Please install MetaMask or another wallet.");
+        }
+    }
+
+    // Attach the click event listener directly to the button
+    enableEthereumButton.addEventListener("click", connectWallet);
+
     
     // Contract details (defined once)
     const contractAddress = '0x2f3441EEE57cf40244aD680E8a4E517F3Fc6BFDC';
