@@ -42,7 +42,7 @@ SECRET_KEY = 'django-insecure-xhc67#*5m2zc!(1ps6*whcs%jdxag-e!l6@7k-pacnz5pjv*ux
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 CSP_DEFAULT_SRC = ("'self'", "https://cdn.jsdelivr.net", "https://metamask.io")
 CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://metamask.io")
