@@ -26,6 +26,11 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
+ALLOWED_HOSTS = [
+    'xeam.onrender.com',
+    'www.xeam.onrender.com',  # optional, just in case
+]
+
 
 
 # Quick-start development settings - unsuitable for production
