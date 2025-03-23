@@ -11,6 +11,11 @@ body {
     padding: 0;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+
 a {
     text-decoration: none;
     color: white;
@@ -316,6 +321,18 @@ img.logo-image {
     border: 0;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
 }
+
+/** {
+    outline: 1px solid red;
+  }*/
+
+  @media (min-width: 992px) {
+    .col-lg-12 {
+      flex: 1 0 50%;
+      /* or just let Bootstrap handle it without overriding */
+    }
+  }
+  
 
 
   
