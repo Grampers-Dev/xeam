@@ -28,7 +28,8 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 ALLOWED_HOSTS = [
     'xeam.onrender.com',
-    'www.xeam.onrender.com',  # optional, just in case
+    'www.xeam.onrender.com',
+    '127.0.0.1'  # optional, just in case
 ]
 
 

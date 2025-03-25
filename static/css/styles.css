@@ -16,20 +16,24 @@ body {
   }
   
 
-a {
+  a, .nav-link, .nav-link:active {
     text-decoration: none;
     color: white;
     transition: color 0.3s ease;
     margin-right: 20px;
 }
 
-a:hover {
-    color: #ff3c3c;
+a:hover, .nav-link:hover, .nav-link:active {
+    color: #ffffff;
 }
 
+
 /* === NAVBAR === */
-.navbar {
-    background-color: #0d0b1f;
+.navbar,
+.navbar-expand-lg,
+.navbar-light,
+.bg-light {
+    background-color: #0d0b1f !important;
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
@@ -40,6 +44,7 @@ a:hover {
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(255, 60, 60, 0.5);
 }
+
 
 .navbar-brand {
     font-size: 1.5rem;
@@ -66,8 +71,8 @@ a:hover {
     padding: 8px;
     border-radius: 5px;
     border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    
+    color:
     text-align: center;
 }
 
@@ -330,6 +335,74 @@ img.logo-image {
     .col-lg-12 {
       flex: 1 0 50%;
       /* or just let Bootstrap handle it without overriding */
+    }
+  }
+  
+/* === MOBILE FIRST: Small devices (phones, <768px) === */
+@media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+    }
+  
+    .navbar-buttons {
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .hero-section {
+      flex-direction: column;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+  
+    .hero-text {
+      max-width: 100%;
+      margin-bottom: 30px;
+    }
+  
+    .hero-text h1 {
+      font-size: 2rem;
+    }
+  
+    .hero-image img {
+      max-width: 90%;
+      height: auto;
+    }
+  
+    .features-container {
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+  
+    .feature {
+      margin-bottom: 2rem;
+      max-width: 90%;
+    }
+  
+    .steps-to-trade li {
+      width: 100%;
+      max-width: 90%;
+    }
+  
+    .contact-form input,
+    .contact-form textarea {
+      width: 90%;
+    }
+  
+    .footer {
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+  
+    img.logo-image {
+      margin-left: 0;
+      width: 70%;
     }
   }
   
