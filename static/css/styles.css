@@ -310,7 +310,7 @@ img.logo-image {
 
     /* Remove or comment out these lines if using Bootstrap columns: */
     /* max-width: 300px; */
-    /* margin: 20px; */
+    margin: 20px;
     /* display: inline-block; */
     /* width: 250px; */
 }
