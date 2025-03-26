@@ -3,143 +3,181 @@
 {% load static %}
 {% load cloudinary %}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
-            <div class="logo">
-                <div>
-
-                        <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1738699609/wltspztyxldd6yzqpb25.jpg" alt="Tangle Logo" class="logo-image">
-                    </a>
-                </div>
-            </div>
-            <div class="pageTitle">Welcome to XEAM</div>
-        </div>
+<!-- NAVBAR (Same as index) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp" alt="XEAM Token Logo" class="logo-main" style="height: 40px;">
+      XEAM
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Tokenomics</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Roadmap</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
+          <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+        <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
+      </div>
     </div>
-</div>
+  </div>
+</nav>
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12 col-lg-offset-0">
-            <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1738699609/wltspztyxldd6yzqpb25.jpg" alt="Tangle Logo" class="logo-main">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'index' %}">
-                                <i class="fas fa-home"></i> Home
-                            </a>
-                        </li>
-                        {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profile' %}">
-                                <i class="far fa-user"></i> Profile
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">
-                                <i class="fas fa-sign-in-alt"></i> Login
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </nav>
-            
-            <!-- Display the page title and the number of threads from the database -->
-            <div class="pageTitle">My Profile</div>
-
-            <div class="container">
-                <div class="row pad">
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">My Info <i class="fas fa-info-circle"></i></h3>
-                            </div>
-                            {% if request.user.user_profile.image %}
-                            <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}" class="profile-image">
-                        {% else %}
-                            <i class="fas fa-user"></i>
-                        {% endif %}
-                        {{ request.user.username }}
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Bio: <strong>{{ object.bio }}</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Location: <strong>{{ object.location }}</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Birth Date: <strong>{{ object.birth_date }}</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Email: <strong>{{ user.email }}</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Username: <strong>{{ user.username }}</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Num of Posts: <strong>{{ user.reply_set.count }}</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Join Date: <strong>{{ user.date_joined }}</strong>
-                                </li>
-                            </ul>
-                            <button id="editProfileBtn" class="btn btn-primary" title="Edit Profile">Edit Profile</button>
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
-            <!-- Hidden Form -->
-            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                <div id="editProfileForm" style="display: none;">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-success">Save</button>
-                    </form>
-                </div>
-            </div>
+<!-- HERO/HEADER -->
+<!-- HERO SECTION WITH MATCHING BACKGROUND STYLE -->
+<!-- DASHBOARD LAYOUT -->
+<div class="container my-5">
+    <!-- ROW 1: Profile + Edit Form -->
+    <div class="row g-4">
+      <!-- PROFILE CARD -->
+      <div class="col-md-6 col-lg-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">My Info <i class="fas fa-info-circle"></i></h4>
+          </div>
+          <div class="card-body text-center">
+            {% if request.user.user_profile.image %}
+              <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}" class="img-fluid rounded-circle mb-3 profile-image" style="width: 120px;">
+            {% else %}
+              <i class="fas fa-user-circle fa-4x mb-3 text-muted"></i>
+            {% endif %}
+            <h5>{{ request.user.username }}</h5>
+            <ul class="list-group text-start mt-3">
+              <li class="list-group-item">Bio: <strong>{{ object.bio }}</strong></li>
+              <li class="list-group-item">Location: <strong>{{ object.location }}</strong></li>
+              <li class="list-group-item">Birth Date: <strong>{{ object.birth_date }}</strong></li>
+              <li class="list-group-item">Email: <strong>{{ user.email }}</strong></li>
+              <li class="list-group-item">Username: <strong>{{ user.username }}</strong></li>
+              <li class="list-group-item">Num of Posts: <strong>{{ user.reply_set.count }}</strong></li>
+              <li class="list-group-item">Join Date: <strong>{{ user.date_joined }}</strong></li>
+            </ul>
+            <button id="editProfileBtn" class="btn btn-outline-primary mt-3"><i class="fas fa-edit"></i> Edit Profile</button>
+          </div>
         </div>
+      </div>
+  
+      <!-- EDIT FORM -->
+      <div class="col-md-6 col-lg-6">
+        <div id="editProfileForm" style="display: none;" class="h-100">
+          <div class="card shadow-sm h-100">
+            <div class="card-header">Edit Profile</div>
+            <div class="card-body">
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="center">
-                    Copyright &copy; 2024 Tangle. All rights reserved.
-                </div>
+  
+    <!-- ROW 2: CLAIM TOKENS -->
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <div class="card shadow-sm border-success">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">🎁 Claim Encouragement Tokens</h5>
+          </div>
+          <div class="card-body text-center">
+            <p class="mb-3">You're eligible for a reward based on your contributions. Claim your XEAM tokens below.</p>
+            <div id="walletAddress" class="mb-2 text-muted">
+              Wallet: <code>0x...loading</code>
             </div>
+            <h4 class="mb-3">🔸 45 XEAM Available</h4>
+            <button class="btn btn-success" id="claimBtn">
+              <i class="fas fa-hand-holding-usd"></i> Claim Tokens
+            </button>
+            <div id="claimStatus" class="mt-3 text-info"></div>
+          </div>
         </div>
-    </footer>
-</div>
+      </div>
+    </div>
+  
+    <!-- ROW 3: STAKING DASHBOARD -->
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <div class="card shadow-sm border-warning">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">📈 XEAM Staking Dashboard</h5>
+          </div>
+          <div class="card-body text-center">
+            <p>Stake your XEAM tokens to earn rewards and support charitable causes.</p>
+  
+            <!-- Wallet & Balance -->
+            <div class="mb-2 text-muted">
+              Wallet: <code id="stakingWallet">0x...loading</code>
+            </div>
+            <div class="mb-3">
+              Available Balance: <strong id="availableBalance">--</strong> XEAM
+            </div>
+  
+            <!-- Staking Input -->
+            <input type="number" id="stakeAmount" class="form-control mb-2" placeholder="Enter amount to stake" min="1">
+            <button class="btn btn-warning" id="stakeBtn"><i class="fas fa-lock"></i> Stake XEAM</button>
+  
+            <!-- Unstake -->
+            <button class="btn btn-outline-secondary mt-2" id="unstakeBtn"><i class="fas fa-unlock"></i> Unstake</button>
+  
+            <!-- Rewards -->
+            <div class="mt-4">
+              <h6>🎉 Rewards Earned: <span id="earnedRewards">0</span> XEAM</h6>
+            </div>
+  
+            <!-- Status Message -->
+            <div id="stakingStatus" class="mt-3 text-info"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+   
+
+<!-- FOOTER (same style as index) -->
+<footer class="footer mt-5">
+  <div>
+    <h5>Token Radar</h5>
+    <p>Revolutionizing crypto analytics and blockchain transparency.</p>
+  </div>
+  <div class="footer-links">
+    <h5>Links</h5>
+    <a href="#">How it works</a><br>
+    <a href="#">Cryptos</a><br>
+    <a href="#">Features</a><br>
+  </div>
+  <div>
+    <h5>Newsletter</h5>
+    <input type="email" placeholder="Enter your email">
+    <button class="subscribe-btn">Subscribe</button>
+  </div>
+</footer>
 
 <script>
-        document.getElementById('editProfileBtn').addEventListener('click', function() {
-            var form = document.getElementById('editProfileForm');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-                this.textContent = 'Cancel';
-            } else {
-                form.style.display = 'none';
-                this.textContent = 'Edit Profile';
-            }
-        });
+  document.getElementById('editProfileBtn').addEventListener('click', function() {
+    const form = document.getElementById('editProfileForm');
+    if (form.style.display === 'none') {
+      form.style.display = 'block';
+      this.textContent = 'Cancel Edit';
+    } else {
+      form.style.display = 'none';
+      this.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+    }
+  });
 </script>
 
 {% endblock %}
+
