@@ -39,115 +39,113 @@
 <!-- HERO SECTION WITH MATCHING BACKGROUND STYLE -->
 <!-- DASHBOARD LAYOUT -->
 <div class="container my-5">
-    <!-- ROW 1: Profile + Edit Form -->
-    <div class="row g-4">
-      <!-- PROFILE CARD -->
-      <div class="col-md-6 col-lg-6">
+  <!-- ROW 1: Profile + Edit Form -->
+  <div class="row g-4">
+    <!-- PROFILE CARD -->
+    <div class="col-md-6 col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">My Info <i class="fas fa-info-circle"></i></h4>
+        </div>
+        <div class="card-body text-center">
+          {% if request.user.user_profile.image %}
+            <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}" class="img-fluid rounded-circle mb-3 profile-image" style="width: 120px;">
+          {% else %}
+            <i class="fas fa-user-circle fa-4x mb-3 text-muted"></i>
+          {% endif %}
+          <h5>{{ request.user.username }}</h5>
+          <ul class="list-group text-start mt-3">
+            <li class="list-group-item">Bio: <strong>{{ object.bio }}</strong></li>
+            <li class="list-group-item">Location: <strong>{{ object.location }}</strong></li>
+            <li class="list-group-item">Birth Date: <strong>{{ object.birth_date }}</strong></li>
+            <li class="list-group-item">Email: <strong>{{ user.email }}</strong></li>
+            <li class="list-group-item">Username: <strong>{{ user.username }}</strong></li>
+            <li class="list-group-item">Num of Posts: <strong>{{ user.reply_set.count }}</strong></li>
+            <li class="list-group-item">Join Date: <strong>{{ user.date_joined }}</strong></li>
+          </ul>
+          <button id="editProfileBtn" class="btn btn-outline-primary mt-3"><i class="fas fa-edit"></i> Edit Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div class="col-md-6 col-lg-6">
+      <div id="editProfileForm" style="display: none;" class="h-100">
         <div class="card shadow-sm h-100">
-          <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">My Info <i class="fas fa-info-circle"></i></h4>
-          </div>
-          <div class="card-body text-center">
-            {% if request.user.user_profile.image %}
-              <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}" class="img-fluid rounded-circle mb-3 profile-image" style="width: 120px;">
-            {% else %}
-              <i class="fas fa-user-circle fa-4x mb-3 text-muted"></i>
-            {% endif %}
-            <h5>{{ request.user.username }}</h5>
-            <ul class="list-group text-start mt-3">
-              <li class="list-group-item">Bio: <strong>{{ object.bio }}</strong></li>
-              <li class="list-group-item">Location: <strong>{{ object.location }}</strong></li>
-              <li class="list-group-item">Birth Date: <strong>{{ object.birth_date }}</strong></li>
-              <li class="list-group-item">Email: <strong>{{ user.email }}</strong></li>
-              <li class="list-group-item">Username: <strong>{{ user.username }}</strong></li>
-              <li class="list-group-item">Num of Posts: <strong>{{ user.reply_set.count }}</strong></li>
-              <li class="list-group-item">Join Date: <strong>{{ user.date_joined }}</strong></li>
-            </ul>
-            <button id="editProfileBtn" class="btn btn-outline-primary mt-3"><i class="fas fa-edit"></i> Edit Profile</button>
-          </div>
-        </div>
-      </div>
-  
-      <!-- EDIT FORM -->
-      <div class="col-md-6 col-lg-6">
-        <div id="editProfileForm" style="display: none;" class="h-100">
-          <div class="card shadow-sm h-100">
-            <div class="card-header">Edit Profile</div>
-            <div class="card-body">
-              <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-success">Save</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- ROW 2: CLAIM TOKENS -->
-    <div class="row g-4 mt-4">
-      <div class="col-12">
-        <div class="card shadow-sm border-success">
-          <div class="card-header bg-success text-white">
-            <h5 class="mb-0">🎁 Claim Encouragement Tokens</h5>
-          </div>
-          <div class="card-body text-center">
-            <p class="mb-3">You're eligible for a reward based on your contributions. Claim your XEAM tokens below.</p>
-            <div id="walletAddress" class="mb-2 text-muted">
-              Wallet: <code>0x...loading</code>
-            </div>
-            <h4 class="mb-3">🔸 45 XEAM Available</h4>
-            <button class="btn btn-success" id="claimBtn">
-              <i class="fas fa-hand-holding-usd"></i> Claim Tokens
-            </button>
-            <div id="claimStatus" class="mt-3 text-info"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- ROW 3: STAKING DASHBOARD -->
-    <div class="row g-4 mt-4">
-      <div class="col-12">
-        <div class="card shadow-sm border-warning">
-          <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0">📈 XEAM Staking Dashboard</h5>
-          </div>
-          <div class="card-body text-center">
-            <p>Stake your XEAM tokens to earn rewards and support charitable causes.</p>
-  
-            <!-- Wallet & Balance -->
-            <div class="mb-2 text-muted">
-              Wallet: <code id="stakingWallet">0x...loading</code>
-            </div>
-            <div class="mb-3">
-              Available Balance: <strong id="availableBalance">--</strong> XEAM
-            </div>
-  
-            <!-- Staking Input -->
-            <input type="number" id="stakeAmount" class="form-control mb-2" placeholder="Enter amount to stake" min="1">
-            <button class="btn btn-warning" id="stakeBtn"><i class="fas fa-lock"></i> Stake XEAM</button>
-  
-            <!-- Unstake -->
-            <button class="btn btn-outline-secondary mt-2" id="unstakeBtn"><i class="fas fa-unlock"></i> Unstake</button>
-  
-            <!-- Rewards -->
-            <div class="mt-4">
-              <h6>🎉 Rewards Earned: <span id="earnedRewards">0</span> XEAM</h6>
-            </div>
-  
-            <!-- Status Message -->
-            <div id="stakingStatus" class="mt-3 text-info"></div>
+          <div class="card-header">Edit Profile</div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-success">Save</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
-   
 
-<!-- FOOTER (same style as index) -->
+  <!-- ROW 2: CLAIM TOKENS -->
+  <div class="row g-4 mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">🎁 Claim Encouragement Tokens</h5>
+        </div>
+        <div class="card-body text-center">
+          <p class="mb-3">You're eligible for a reward based on your contributions. Claim your XEAM tokens below.</p>
+          <div id="walletAddress" class="mb-2 text-muted">
+            Wallet: <code>0x...loading</code>
+          </div>
+          <h4 class="mb-3">🔸 45 XEAM Available</h4>
+          <button class="btn btn-success" id="claimBtn">
+            <i class="fas fa-hand-holding-usd"></i> Claim Tokens
+          </button>
+          <div id="claimStatus" class="mt-3 text-info"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: STAKING DASHBOARD -->
+  <div class="row g-4 mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-warning">
+        <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0">📈 XEAM Staking Dashboard</h5>
+        </div>
+        <div class="card-body text-center">
+          <p>Stake your XEAM tokens to earn rewards and support charitable causes.</p>
+
+          <!-- Wallet & Balance -->
+          <div class="mb-2 text-muted">
+            Wallet: <code id="stakingWallet">0x...loading</code>
+          </div>
+          <div class="mb-3">
+            Available Balance: <strong id="availableBalance">--</strong> XEAM
+          </div>
+
+          <!-- Staking Input -->
+          <input type="number" id="stakeAmount" class="form-control mb-2" placeholder="Enter amount to stake" min="1">
+          <button class="btn btn-warning" id="stakeBtn"><i class="fas fa-lock"></i> Stake XEAM</button>
+
+          <!-- Unstake -->
+          <button class="btn btn-outline-secondary mt-2" id="unstakeBtn"><i class="fas fa-unlock"></i> Unstake</button>
+
+          <!-- Rewards -->
+          <div class="mt-4">
+            <h6>🎉 Rewards Earned: <span id="earnedRewards">0</span> XEAM</h6>
+          </div>
+
+          <!-- Status Message -->
+          <div id="stakingStatus" class="mt-3 text-info"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer class="footer mt-5">
   <div>
     <h5>Token Radar</h5>
@@ -167,7 +165,7 @@
 </footer>
 
 <script>
-  document.getElementById('editProfileBtn').addEventListener('click', function() {
+  document.getElementById('editProfileBtn')?.addEventListener('click', function() {
     const form = document.getElementById('editProfileForm');
     if (form.style.display === 'none') {
       form.style.display = 'block';

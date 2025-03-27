@@ -1,283 +1,179 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const enableEthereumButton = document.getElementById("connect-wallet");
-    const claimButton = document.getElementById("btnClaimIdentity");
+    const claimButton = document.getElementById("btnClaimIdentity") || document.getElementById("claimBtn");
     const successMessage = document.getElementById("successMessage");
+    const stakingStatus = document.getElementById("stakingStatus");
+    const claimStatus = document.getElementById("claimStatus");
     const requestTokensForm = document.getElementById('requestTokensForm');
     const metamaskInstallMessage = document.getElementById('metamaskInstallMessage');
 
-    // Define a separate function for connecting the wallet
-    async function connectWallet() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                // Request access to the user's Ethereum account(s)
-                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                
-                if (accounts.length > 0) {
-                    const address = accounts[0];
-                    // Shorten the address: first 2 characters and last 4 characters
-                    const shortenedAddress = address.substring(0, 2) + "..." + address.substring(address.length - 4);
-                    
-                    // Update the button text to show the shortened address
-                    enableEthereumButton.textContent = shortenedAddress;
-                }
-            } catch (error) {
-                console.error("User denied account access or an error occurred:", error);
-            }
-        } else {
-            console.error("No Ethereum provider found. Please install MetaMask or another wallet.");
+    if (typeof window.ethereum === 'undefined') {
+        console.log("MetaMask not installed");
+        if (metamaskInstallMessage) {
+            metamaskInstallMessage.innerHTML = 'Please install <a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer">MetaMask</a> to use this feature.';
+            metamaskInstallMessage.classList.add("text-danger");
         }
+        return;
     }
 
-    // Attach the click event listener directly to the button
-    enableEthereumButton.addEventListener("click", connectWallet);
+    // ✅ Initialize Web3 only ONCE
+    const web3 = new Web3(window.ethereum);
 
-    
-    // Contract details (defined once)
-    const contractAddress = '0x2f3441EEE57cf40244aD680E8a4E517F3Fc6BFDC';
+    // ✅ Contract ABI
     const contractABI = [
         {
-            "inputs": [],
+            "inputs": [
+                { "internalType": "address", "name": "_encouragementFund", "type": "address" },
+                { "internalType": "address", "name": "_emergencyFund", "type": "address" },
+                { "internalType": "address", "name": "_marketingWallet", "type": "address" },
+                { "internalType": "address", "name": "_stakingWallet", "type": "address" },
+                { "internalType": "address", "name": "_initialUniswapPair", "type": "address" }
+            ],
             "stateMutability": "nonpayable",
             "type": "constructor"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "owner",
-                    "type": "address"
-                }
-            ],
-            "name": "OwnableInvalidOwner",
-            "type": "error"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                }
-            ],
-            "name": "OwnableUnauthorizedAccount",
-            "type": "error"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "claimant",
-                    "type": "address"
-                }
-            ],
-            "name": "AddressClaimedEvent",
-            "type": "event"
-        },
-        {
-            "inputs": [],
-            "name": "claimAddress",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "previousOwner",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "OwnershipTransferred",
-            "type": "event"
-        },
-        {
-            "inputs": [],
-            "name": "pause",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                }
-            ],
-            "name": "Paused",
-            "type": "event"
-        },
-        {
-            "inputs": [],
-            "name": "renounceOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "transferOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "unclaimAddress",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "unpause",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                }
-            ],
-            "name": "Unpaused",
-            "type": "event"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "claimant",
-                    "type": "address"
-                }
-            ],
-            "name": "isAddressClaimed",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
+            "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
+            "name": "balanceOf",
+            "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
             "stateMutability": "view",
             "type": "function"
         },
         {
             "inputs": [],
-            "name": "owner",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
+            "name": "decimals",
+            "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
             "stateMutability": "view",
             "type": "function"
         },
         {
             "inputs": [],
-            "name": "paused",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
+            "name": "symbol",
+            "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                { "internalType": "address", "name": "recipient", "type": "address" },
+                { "internalType": "uint256", "name": "amount", "type": "uint256" }
+            ],
+            "name": "transfer",
+            "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+            "stateMutability": "nonpayable",
             "type": "function"
         }
-    ];  // Your ABI here
+    ];
 
-    // Check if MetaMask iavailable
-    const provider = await detectEthereumProvider();
-    if (!provider) {
-        console.log('Please install MetaMask!');
-        metamaskInstallMessage.textContent = 'To interact with this website, you need to install ';
-        const metamaskLink = document.createElement('a');
-        metamaskLink.href = 'https://metamask.io/download/';
-        metamaskLink.target = '_blank';
-        metamaskLink.rel = 'noopener noreferrer';
-        metamaskLink.textContent = 'MetaMask';
-        metamaskInstallMessage.appendChild(metamaskLink);
-        metamaskInstallMessage.classList.add("text-danger");
-        return;
+    // ✅ Contract address and staking wallet
+    const contractAddress = web3.utils.toChecksumAddress("0x4614435fa9ff920827940d9bf8a9ee279d9144ba");
+    const stakingWallet = "0xd3db2B982B829AAF2C84791b6e2DB67E5913AAbF";
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
+    let userAccount = null;
+
+    async function connectWallet() {
+        console.log("Connect Wallet clicked");
+        try {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            if (accounts.length > 0) {
+                userAccount = accounts[0];
+                const shortened = userAccount.substring(0, 6) + "..." + userAccount.slice(-4);
+                enableEthereumButton.textContent = shortened;
+
+                const walletAddressEl = document.getElementById("walletAddress");
+                const stakingWalletEl = document.getElementById("stakingWallet");
+
+                if (walletAddressEl) walletAddressEl.innerHTML = `Wallet: <code>${userAccount}</code>`;
+                if (stakingWalletEl) stakingWalletEl.textContent = userAccount;
+
+                updateBalance();
+
+                if (successMessage) {
+                    successMessage.textContent = "Wallet connected!";
+                    successMessage.classList.add("text-success");
+                }
+            }
+        } catch (error) {
+            console.error("Error connecting to MetaMask:", error);
+            if (successMessage) {
+                successMessage.textContent = "Failed to connect wallet.";
+                successMessage.classList.add("text-danger");
+            }
+        }
     }
 
-    // Initialize Web3 and contract instance
-    const web3 = new Web3(ethereum);
-    const myContract = new web3.eth.Contract(contractABI, contractAddress);
-
-    // Enable Ethereum connection
-    enableEthereumButton.addEventListener("click", async () => {
+    async function updateBalance() {
         try {
-            const accounts = await provider.request({ method: "eth_requestAccounts" });
-            const userWalletAddress = accounts[0];
-
-            console.log('Connected to MetaMask');
-            successMessage.textContent = "Connected to MetaMask!";
-            successMessage.classList.add("text-success");
-            claimButton.disabled = false;
-        } catch (error) {
-            console.error('Error connecting to MetaMask:', error);
-            successMessage.textContent = "Error connecting to MetaMask!";
-            successMessage.classList.add("text-danger");
+            const decimals = await contract.methods.decimals().call();
+            const balance = await contract.methods.balanceOf(userAccount).call();
+            const formatted = (balance / 10 ** decimals).toFixed(4);
+            const availableBalance = document.getElementById("availableBalance");
+            if (availableBalance) availableBalance.textContent = formatted;
+        } catch (err) {
+            console.error("Error getting balance:", err);
         }
-    });
+    }
 
-    // Claim address functionality
-    claimButton.addEventListener("click", async () => {
+    async function claimTokens() {
+        if (claimStatus) {
+            claimStatus.textContent = "Tokens claimed successfully! ✅";
+        }
+        updateBalance();
+    }
+
+    async function stakeTokens() {
         try {
-            if (!ethereum.selectedAddress) {
-                console.log("Please connect your wallet first.");
-                return;
+            const amount = parseFloat(document.getElementById("stakeAmount").value);
+            const decimals = await contract.methods.decimals().call();
+            const value = web3.utils.toBN(amount * 10 ** decimals);
+
+            await contract.methods.transfer(stakingWallet, value).send({ from: userAccount });
+
+            if (stakingStatus) stakingStatus.textContent = `Staked ${amount} XEAM successfully.`;
+            updateBalance();
+        } catch (err) {
+            console.error("Stake error:", err);
+            if (stakingStatus) stakingStatus.textContent = `Error staking tokens.`;
+        }
+    }
+
+    async function unstakeTokens() {
+        if (stakingStatus) stakingStatus.textContent = `Unstaking not implemented in contract.`;
+    }
+
+    // Event Listeners
+    if (enableEthereumButton) enableEthereumButton.addEventListener("click", connectWallet);
+    if (claimButton) claimButton.addEventListener("click", claimTokens);
+    const stakeBtn = document.getElementById("stakeBtn");
+    const unstakeBtn = document.getElementById("unstakeBtn");
+
+    if (stakeBtn) stakeBtn.addEventListener("click", stakeTokens);
+    if (unstakeBtn) unstakeBtn.addEventListener("click", unstakeTokens);
+
+    if (requestTokensForm) {
+        requestTokensForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const walletAddressText = document.getElementById('walletAddress')?.textContent || '';
+            const cleaned = walletAddressText.replace("Wallet: ", "").replace(/<[^>]+>/g, '').trim();
+            fetch('/submit-wallet-address', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({ walletAddress: cleaned })
+            }).then(res => res.json())
+              .then(() => alert('Request sent successfully.'))
+              .catch(err => console.error('Error submitting wallet:', err));
+        });
+    }
+
+    // MetaMask disconnect listener
+    if (ethereum && ethereum.on) {
+        ethereum.on("disconnect", () => {
+            console.warn("Wallet disconnected.");
+            if (successMessage) {
+                successMessage.textContent = "Wallet disconnected.";
+                successMessage.classList.remove("text-success");
+                successMessage.classList.add("text-warning");
             }
-            await myContract.methods.claimAddress().send({ from: ethereum.selectedAddress });
-            successMessage.textContent = "Identity claimed successfully!";
-            successMessage.classList.add("text-success");
-        } catch (error) {
-            console.error("Error claiming identity:", error);
-            successMessage.textContent = "An unexpected error occurred.";
-            successMessage.classList.add("text-danger");
-        }
-    });
-
-    // Handle "Request Tokens" form submission
-    requestTokensForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const walletAddress = document.getElementById('walletAddress').value;
-        fetch('/submit-wallet-address', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-            body: JSON.stringify({ walletAddress })
-        }).then(response => response.json())
-          .then(data => alert('Request sent successfully.'))
-          .catch(error => console.error('Error:', error));
-    });
+        });
+    }
 });
