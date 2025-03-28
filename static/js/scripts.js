@@ -53,16 +53,23 @@ function updateGradient() {
     const width = document.documentElement.scrollWidth;
     const height = document.documentElement.scrollHeight;
     const size = Math.max(width, height) * 2;
-
-    degree = (degree + 0.5) % 360; // Increment degree slowly to animate rotation
-    const gradientColor = `linear-gradient(${degree}deg, rgba(255,0,0,1), rgba(0,0,255,1))`;
+  
+    degree = (degree + 0.25) % 360; // slower, smoother rotation
+  
+    const gradientColor = `linear-gradient(${degree}deg,
+      rgba(0, 255, 255, 0.1),
+      rgba(0, 128, 255, 0.12),
+      rgba(138, 43, 226, 0.12),
+      rgba(255, 20, 147, 0.1))`;
+  
     bodyElement.style.backgroundImage = gradientColor;
     bodyElement.style.backgroundSize = `${size}px ${size}px`;
     bodyElement.style.backgroundPosition = 'center center';
     bodyElement.style.backgroundRepeat = 'no-repeat';
-
-    animationFrameId = requestAnimationFrame(updateGradient); // Continue the animation
-}
+  
+    animationFrameId = requestAnimationFrame(updateGradient);
+  }
+  
 
 function startAnimation() {
     if (!animationFrameId) {
