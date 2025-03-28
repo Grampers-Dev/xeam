@@ -144,6 +144,70 @@ $(document).ready(function(){
     });
 });
 
+const ctx1 = document.getElementById('tokenomicsChart').getContext('2d');
+const tokenomicsChart = new Chart(ctx1, {
+  type: 'doughnut',
+  data: {
+    labels: [
+      'Liquidity Pool (50%)',
+      'Marketing & Dev (22.2%)',
+      'Staking (14.1%)',
+      'Team (9.7%)',
+      'Encouragement Fund (4%)'
+    ],
+    datasets: [{
+      label: 'XEAM Tokenomics',
+      data: [50, 22.2, 14.1, 9.7, 4],
+      backgroundColor: [
+        '#4CAF50',
+        '#2196F3',
+        '#FF9800',
+        '#9C27B0',
+        '#F44336'
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { position: 'bottom' }
+    }
+  }
+});
+
+// Roadmap Progress Bar Chart
+const ctx2 = document.getElementById('roadmapChart').getContext('2d');
+const roadmapChart = new Chart(ctx2, {
+  type: 'bar',
+  data: {
+    labels: [
+      'Website & Whitepaper',
+      'Token Deployment',
+      'Liquidity Lock',
+      'Token Burn',
+      'Listings',
+      'Audit',
+      'Marketing',
+      'Staking & DAO',
+      'NFT Series'
+    ],
+    datasets: [{
+      label: 'Milestone Progress',
+      data: [100, 100, 90, 80, 70, 60, 50, 40, 30], // Adjust progress values here
+      backgroundColor: '#2196F3'
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: { beginAtZero: true, max: 100 }
+    },
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
+
 module.exports = {
     typeWriter,
     startAnimation,

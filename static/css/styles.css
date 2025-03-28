@@ -406,6 +406,98 @@ img.logo-image {
     }
   }
   
+.footer-social a {
+  margin-right: 10px;
+  font-size: 1.2rem;
+  color: #fff; /* or your preferred color */
+}
 
+.footer-social a {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #fff; /* or your preferred color */
+  }
+
+.footer-social a:hover {
+    color: #ff3c3c; /* Change to your desired hover color */
+  }
+.footer-social {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;  
+    }
+
+.footer-social a {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #fff; /* or your preferred color */
+}
+.footer-social a:hover {
+    color: #ff3c3c; /* Change to your desired hover color */
+  }
+
+  .footer-social {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;  
+  }
+    .footer-social a {
+        margin-right: 10px;
+        font-size: 1.2rem;
+        color: #fff; /* or your preferred color */
+    }
+
+.footer-social a:hover {
+        color: #ff3c3c; /* Change to your desired hover color */
+    }
+
+    .feature-card {
+        transition: transform 0.2s ease;
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+      
+      .step-card:hover {
+        transform: translateY(-4px);
+        transition: all 0.2s ease;
+      }
+
+      .step-card:hover {
+        transform: translateY(-4px);
+        transition: all 0.2s ease;
+      }
+      
+      .contact-form {
+        background: linear-gradient(135deg, #007bff, #6610f2); /* XEAM-styled gradient */
+        border-radius: 1rem;
+      }
+      .contact-form .btn {
+        font-weight: 600;
+      }
+      
+      .btn-glow {
+        background-color: #0d6efd;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        border-radius: 30px;
+        box-shadow: 0 0 12px rgba(13, 110, 253, 0.5);
+        transition: all 0.3s ease;
+      }
+      
+      .btn-glow:hover {
+        background-color: #1a73e8;
+        box-shadow: 0 0 20px rgba(13, 110, 253, 0.8);
+        transform: scale(1.03);
+      }
+           
 
   
