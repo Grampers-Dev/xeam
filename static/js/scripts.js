@@ -175,38 +175,6 @@ const tokenomicsChart = new Chart(ctx1, {
   }
 });
 
-// Roadmap Progress Bar Chart
-const ctx2 = document.getElementById('roadmapChart').getContext('2d');
-const roadmapChart = new Chart(ctx2, {
-  type: 'bar',
-  data: {
-    labels: [
-      'Website & Whitepaper',
-      'Token Deployment',
-      'Liquidity Lock',
-      'Token Burn',
-      'Listings',
-      'Audit',
-      'Marketing',
-      'Staking & DAO',
-      'NFT Series'
-    ],
-    datasets: [{
-      label: 'Milestone Progress',
-      data: [100, 100, 90, 80, 70, 60, 50, 40, 30], // Adjust progress values here
-      backgroundColor: '#2196F3'
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    scales: {
-      x: { beginAtZero: true, max: 100 }
-    },
-    plugins: {
-      legend: { display: false }
-    }
-  }
-});
 
 module.exports = {
     typeWriter,
