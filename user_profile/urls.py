@@ -12,7 +12,10 @@ from .forms import ExtendedAuthenticationForm
 urlpatterns = [
     path('index/', views.index, name='index'),
     path('register/', views.register, name='register'),
-    path('profile/', views.profile, name='profile'),
+    path('profile/', views.profile_view, name='profile'),
+
+    path('log-stake/', views.log_stake, name='log_stake'),
+
     path('login/', auth_views.LoginView.as_view(template_name=
     'users/login.html', authentication_form=ExtendedAuthenticationForm), 
     name='login'), 

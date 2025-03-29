@@ -65,3 +65,66 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment {self.body} by {self.author}"
+
+# models.py
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import datetime, timedelta
+
+class StakedToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    wallet_address = models.CharField(max_length=42)
+    amount_staked = models.DecimalField(max_digits=20, decimal_places=8)
+    stake_date = models.DateTimeField(auto_now_add=True)
+    last_reward_sent = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.amount_staked} XEAM"
+
+    def time_staked_seconds(self):
+        return (datetime.now() - self.stake_date).total_seconds()
+
+    def get_tier_multiplier(self):
+        amount = float(self.amount_staked)
+        if amount >= 5000:
+            return 2.0  # Diamond
+        elif amount >= 1000:
+            return 1.5  # Gold
+        elif amount >= 500:
+            return 1.2  # Silver
+        elif amount >= 100:
+            return 1.0  # Bronze
+        else:
+            return 0.5  # Base
+
+    def get_weight(self):
+        return float(self.amount_staked) * self.time_staked_seconds() * self.get_tier_multiplier()
+
+    def calculate_reward_share(self, total_weight, reward_pool):
+        if total_weight == 0:
+            return 0
+        share = self.get_weight() / total_weight
+        return round(share * reward_pool, 4)
+
+
+# management/commands/calculate_rewards.py
+from django.core.management.base import BaseCommand
+from user_profile.models import StakedToken
+
+class Command(BaseCommand):
+    help = 'Calculate staking rewards based on weighted stake duration and amount.'
+
+    def handle(self, *args, **kwargs):
+        reward_pool = 100000  # total XEAM to distribute
+        all_stakes = StakedToken.objects.all()
+
+        total_weight = sum([stake.get_weight() for stake in all_stakes])
+
+        self.stdout.write(f"Total reward pool: {reward_pool} XEAM")
+        self.stdout.write(f"Total weighted stake: {total_weight}")
+
+        for stake in all_stakes:
+            reward = stake.calculate_reward_share(total_weight, reward_pool)
+            self.stdout.write(
+                f"User: {stake.user.username} | Tier: {stake.get_tier_multiplier()}x | Reward: {reward} XEAM"
+            )

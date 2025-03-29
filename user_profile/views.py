@@ -4,84 +4,54 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from .forms import ExtendedUserCreationForm
 from django.contrib import messages
-#from forum.models import Profile
-#from cloudinary.forms import cl_init_js_callbacks      
-from .forms import ProfileForm
-from user_profile.models import Profile, Post
-from django.contrib.auth.forms import PasswordResetForm
-from django.http import HttpResponse
 from django.views.generic import DetailView
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse
+from django.contrib.auth.forms import PasswordResetForm
+from .forms import ExtendedUserCreationForm, ProfileForm
+from user_profile.models import Profile, Post, StakedToken
+import json
+from datetime import datetime
+
 
 def index(request):
-    """
-    View for the home page.
-
-    Parameters:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The HTTP response object.
-    """
     return render(request, 'users/index.html')
+
 
 class PostDetail(DetailView):
     model = Post
-    template_name = 'index.html'  # Replace 'post_detail.html' with the name of your template
-    context_object_name = 'post'  # This will be the variable name used in the template to access the post object
-    DetailView.queryset = Post.objects.filter(status=1)
-    DetailView.template_name = 'index.html'
-    DetailView.context_object_name = 'post'
-    DetailView.slug_field = 'slug'
-    DetailView.slug_url_kwarg = 'slug'
-    DetailView.query_pk_and_slug = False
-    
+    template_name = 'index.html'
+    context_object_name = 'post'
+    queryset = Post.objects.filter(status=1)
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post'] = Post.objects.filter(status=1)
         return context
-    
+
     def get_queryset(self):
         return Post.objects.filter(status=1)
-    
-    def get_object(self):
-        return Post.objects.filter(status=1)
-    
+
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')
-    
+
     def post(self, request, *args, **kwargs):
         return render(request, 'index.html')
 
 
-
-
 def register(request):
-    """
-    View for user registration.
-
-    Handles the registration form submission and creates a new user account.
-    Sends a welcome email to the newly registered user.
-
-    Parameters:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponseRedirect: Redirects to the login page upon successful registration.
-    """
     if request.method == 'POST':
         form = ExtendedUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-
-            #Send welcome email to the newly registered user
             subject = 'Welcome to Tangle!'
-            context = {'username': user.username}  # Pass any additional context variables needed for the email template
+            context = {'username': user.username}
             html_message = render_to_string('users/welcome_email.html', context)
             plain_message = strip_tags(html_message)
             send_mail(subject, plain_message, 'tangleforum.info@gmail.com', [user.email], html_message=html_message)
-
             messages.success(request, 'Your account has been created. Please log in.')
             return redirect('login')
     else:
@@ -105,26 +75,6 @@ def profile(request):
 
 
 def custom_login(request):
-    """
-    Custom login view.
-
-    Handles user authentication and login.
-
-    Parameters:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponseRedirect: Redirects to the home page upon successful login.
-
-    References:
-        Django authentication:
-        https://docs.djangoproject.com
-        /en/stable/topics/auth/default/#how-to-log-a-user-in
-        Django forms: https://docs.djangoproject.com/en/stable/topics/forms/
-        Django messages:
-        https://docs.djangoproject.com/en/stable/ref/contrib/messages/
-    """
-
     if request.method == 'POST':
         form = ExtendedUserCreationForm(request.POST)
         if form.is_valid():
@@ -135,71 +85,19 @@ def custom_login(request):
                 login(request, user)
                 return redirect('index')
             else:
-                messages.error(request,
-                               'Invalid username or password Please try again')
+                messages.error(request, 'Invalid username or password. Please try again.')
     else:
         form = ExtendedUserCreationForm()
     return render(request, 'user_profile/login.html', {'form': form})
 
 
 def custom_logout(request):
-    """
-    Custom logout view.
-
-    Handles user logout.
-
-    Parameters:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponseRedirect: Redirects to the login page upon logout.
-
-    Reference:
-        Django authentication:
-        https://docs.djangoproject.com
-        /en/stable/topics/auth/default/#how-to-log-a-user-out
-    """
     logout(request)
     messages.info(request, 'You have been logged out.')
     return redirect('login')
 
-#def password_reset_view(request):
-#    """
-#    View for password reset.
-#
-#    Handles the password reset form submission and sends an email to the user with a password reset link.
-#
-#    Parameters:
-#        request (HttpRequest): The HTTP request object.
-#
-#    Returns:
-#        HttpResponseRedirect: Redirects to the password reset done page upon successful password reset request.
-#    """
-#    if request.method == 'POST':
-#        form = PasswordResetForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#            return redirect('login')
-#    else:
-#        form = PasswordResetForm()
-#    return render(request, 'user_profile/login.html')
 
 def custom_password_reset(request):
-    """
-    Custom password reset view.
-
-    Handles the password reset form submission and sends an email to the user with a password reset link.
-
-    Parameters:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponseRedirect: Redirects to the password reset done page upon successful password reset request.
-
-    References:
-        Django authentication:
-        https://docs.djangoproject.com/en/stable/topics/auth/default/#using-the-views
-    """
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
@@ -208,3 +106,55 @@ def custom_password_reset(request):
     else:
         form = PasswordResetForm()
     return render(request, 'account/password_reset_form.html', {'form': form})
+
+
+@login_required
+def profile_view(request):
+    user = request.user
+    profile, _ = Profile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+
+    stake = StakedToken.objects.filter(user=user).first()
+    reward_estimate = 0
+    tier = None
+    staked_seconds = 0
+
+    if stake:
+        total_weight = sum([s.get_weight() for s in StakedToken.objects.all()])
+        reward_estimate = stake.calculate_reward_share(total_weight, 100000)
+        tier = stake.get_tier_multiplier()
+        staked_seconds = stake.time_staked_seconds()
+
+    context = {
+        'form': form,
+        'object': profile,
+        'stake': stake,
+        'reward_estimate': reward_estimate,
+        'tier': tier,
+        'staked_seconds': staked_seconds,
+    }
+    return render(request, 'users/profile.html', context)
+
+
+@csrf_exempt
+def log_stake(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user = request.user
+        amount = float(data.get('amount'))
+        wallet = data.get('wallet')
+
+        stake, created = StakedToken.objects.update_or_create(
+            user=user,
+            defaults={'amount_staked': amount, 'wallet_address': wallet}
+        )
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'error': 'invalid method'}, status=400)
+
