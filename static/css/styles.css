@@ -607,4 +607,19 @@ img.logo-image {
         -webkit-backdrop-filter: blur(12px);
         z-index: -1;
       }
+    
+      .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hover-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 255, 255, 0.15);
+      }
+
+      p.small.text-muted {
+        color: #ffffff !important;
+      }
       
+      .text-muted {
+        color: #ffffff !important;
+      }

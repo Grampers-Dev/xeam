@@ -151,36 +151,59 @@ $(document).ready(function(){
     });
 });
 
-const ctx1 = document.getElementById('tokenomicsChart').getContext('2d');
-const tokenomicsChart = new Chart(ctx1, {
-  type: 'doughnut',
-  data: {
-    labels: [
-      'Liquidity Pool (50%)',
-      'Marketing & Dev (22.2%)',
-      'Staking (14.1%)',
-      'Team (9.7%)',
-      'Encouragement Fund (4%)'
-    ],
-    datasets: [{
-      label: 'XEAM Tokenomics',
-      data: [50, 22.2, 14.1, 9.7, 4],
-      backgroundColor: [
-        '#4CAF50',
-        '#2196F3',
-        '#FF9800',
-        '#9C27B0',
-        '#F44336'
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    plugins: {
-      legend: { position: 'bottom' }
-    }
-  }
-});
+document.addEventListener("DOMContentLoaded", function () {
+    const ctx1 = document.getElementById('tokenomicsChart').getContext('2d');
+    const tokenomicsChart = new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        labels: [
+          'Liquidity Pool (50%)',
+          'Marketing & Dev (22.2%)',
+          'Staking (14.1%)',
+          'Team (9.7%)',
+          'Encouragement Fund (4%)'
+        ],
+        datasets: [{
+          label: 'XEAM Tokenomics',
+          data: [50, 22.2, 14.1, 9.7, 4],
+          backgroundColor: [
+            '#00ffe0',
+            '#0077ff',
+            '#a833ff',
+            '#ff0077',
+            '#ffe600'
+          ],
+          borderColor: '#0d0b1f',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '60%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#fff',
+              padding: 10,
+              font: {
+                size: 13,
+                weight: '500'
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return `${context.label} – ${context.raw}%`;
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+  
 
 
 module.exports = {
