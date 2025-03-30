@@ -4,159 +4,172 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp" alt="XEAM Token Logo" class="logo-main" style="height: 40px;">
-        XEAM
-      </a>
-  
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Tokenomics</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Roadmap</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-        </ul>
-  
-        <!-- Right-aligned buttons -->
-        <div class="d-flex align-items-center gap-2">
-          {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
-            <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          {% else %}
-            <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
-          {% endif %}
-          <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img
+        src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
+        alt="XEAM Token Logo" class="logo-main" style="height: 40px;">
+      XEAM
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Tokenomics</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Roadmap</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+
+      <!-- Right-aligned buttons -->
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
+        <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+        <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
       </div>
     </div>
-  </nav>
-  
+  </div>
+</nav>
+
 
 <div class="container-fluid">
-    <div class="row">
-        <!-- Logo Block with Animation -->
+  <div class="row">
+    <!-- Logo Block with Animation -->
 
+  </div>
+
+  <!-- HERO SECTION (Inside the Animated Container) -->
+  <section class="hero-section">
+    <div class="hero-text">
+      <h1>Discover Our In-depth Tokenomics</h1>
+      <p>Philanthrochain: Empowering Generosity, Block by Block.</p>
+      <button class="btn">Contact Us</button>
     </div>
-
-    <!-- HERO SECTION (Inside the Animated Container) -->
-    <section class="hero-section">
-        <div class="hero-text">
-            <h1>Discover Our In-depth Tokenomics</h1>
-            <p>Philanthrochain: Empowering Generosity, Block by Block.</p>
-            <button class="btn">Contact Us</button>
+    <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
+      <div class="logo">
+        <div>
+          <img
+            src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
+            alt="Tangle Logo" class="logo-image">
         </div>
-        <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
-            <div class="logo">
-                <div>
-                    <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp" 
-                         alt="Tangle Logo" class="logo-image">
-                </div>
-            </div>
-            <div class="pageTitle"></div> <!-- Keeps background & animations -->
-        </div>
-    </section>
+      </div>
+      <div class="pageTitle"></div> <!-- Keeps background & animations -->
+    </div>
+  </section>
 </div>
 
 
-<!-- WHY XEAM SECTION -->
 <section class="features-container py-4">
   <div class="container text-center">
     <h2 class="mb-3">Why XEAM?</h2>
-    <p class="lead mb-4">Supporting NGOs & food banks through blockchain-powered passive income.</p>
+    <p class="lead mb-4">
+      XEAM turns everyday crypto activity into real-world support. Every time someone buys, sells, or transfers XEAM, a
+      small fee is collected and automatically sent to trusted charities — no middlemen, no delays.
+    </p>
 
     <div class="row justify-content-center g-3">
       <div class="col-lg-3 col-md-6">
         <div class="feature-card p-3 shadow-sm rounded-3 h-100">
-          <div class="icon fs-2 mb-2">🌐</div>
+          <div class="icon fs-2 mb-2"><i class="fas fa-globe"></i></div>
           <h6 class="mb-1">Transparent</h6>
-          <p class="small text-muted mb-0">Secure and verifiable on-chain data.</p>
+          <p class="small text-muted mb-0">All donations and transactions are visible on the blockchain — open for
+            anyone to verify.</p>
         </div>
       </div>
 
       <div class="col-lg-3 col-md-6">
         <div class="feature-card p-3 shadow-sm rounded-3 h-100">
-          <div class="icon fs-2 mb-2">🤝</div>
+          <div class="icon fs-2 mb-2"><i class="fas fa-handshake"></i></div>
           <h6 class="mb-1">Charity-Focused</h6>
-          <p class="small text-muted mb-0">Funds go directly to NGOs & food banks.</p>
+          <p class="small text-muted mb-0">4% of every transaction goes straight to NGOs and food banks through The
+            Giving Block.</p>
         </div>
       </div>
 
       <div class="col-lg-3 col-md-6">
         <div class="feature-card p-3 shadow-sm rounded-3 h-100">
-          <div class="icon fs-2 mb-2">📈</div>
-          <h6 class="mb-1">Passive Income</h6>
-          <p class="small text-muted mb-0">Earn while doing good through fees.</p>
+          <div class="icon fs-2 mb-2"><i class="fas fa-coins"></i></div>
+          <h6 class="mb-1">Earn Rewards</h6>
+          <p class="small text-muted mb-0">Stake your XEAM tokens to earn passive rewards while helping others.</p>
         </div>
       </div>
 
       <div class="col-lg-3 col-md-6">
         <div class="feature-card p-3 shadow-sm rounded-3 h-100">
-          <div class="icon fs-2 mb-2">🔒</div>
-          <h6 class="mb-1">DeFi Power</h6>
-          <p class="small text-muted mb-0">Built on decentralized finance principles.</p>
+          <div class="icon fs-2 mb-2"><i class="fas fa-lock"></i></div>
+          <h6 class="mb-1">Built for Trust</h6>
+          <p class="small text-muted mb-0">Security comes first. XEAM uses locked liquidity and smart contracts to
+            ensure your funds are safe.</p>
         </div>
       </div>
     </div>
 
-    <p class="mt-4 fw-semibold small">Join the XEAM movement and be part of the future of finance.</p>
+    <p class="mt-4 fw-semibold small">
+      Be part of a movement where every transaction gives back.
+    </p>
     <a href="https://uniswap.org" target="_blank" class="btn btn-primary btn-sm mt-1">🚀 Get XEAM Token</a>
   </div>
 </section>
 
 
-
-
 <section class="how-to-use py-3">
   <div class="container text-center">
     <h3 class="mb-3">How to Use the XEAM DApp</h3>
+    <p class="text-muted mb-4">Just a few simple steps to start earning and giving back with your XEAM tokens.</p>
 
     <div class="row justify-content-center g-2">
       <div class="col-lg-2 col-md-3 col-6">
-        <div class="step-card p-2 shadow-sm rounded-3 h-100">
-          <div class="icon fs-4 mb-1">🔗</div>
+        <div class="step-card p-2 shadow-sm rounded-3 h-100" data-bs-toggle="tooltip"
+          title="Connect a crypto wallet (like MetaMask) to start using XEAM.">
+          <div class="icon fs-4 mb-1"><i class="fas fa-link"></i></div>
           <h6 class="mb-1 fs-6">Connect</h6>
-          <p class="text-muted small mb-0">Link MetaMask or Web3 wallet.</p>
+          <p class="text-muted small mb-0">Click to connect your wallet (like MetaMask) so you can interact with the
+            platform.</p>
         </div>
       </div>
 
       <div class="col-lg-2 col-md-3 col-6">
-        <div class="step-card p-2 shadow-sm rounded-3 h-100">
-          <div class="icon fs-4 mb-1">🧾</div>
+        <div class="step-card p-2 shadow-sm rounded-3 h-100" data-bs-toggle="tooltip"
+          title="Check if you have any free XEAM tokens to collect.">
+          <div class="icon fs-4 mb-1"><i class="fas fa-receipt"></i></div>
           <h6 class="mb-1 fs-6">Claim</h6>
-          <p class="text-muted small mb-0">Claim or unclaim an address.</p>
+          <p class="text-muted small mb-0">Check if your wallet has unclaimed tokens and collect your XEAM rewards.</p>
         </div>
       </div>
 
       <div class="col-lg-2 col-md-3 col-6">
-        <div class="step-card p-2 shadow-sm rounded-3 h-100">
-          <div class="icon fs-4 mb-1">💼</div>
+        <div class="step-card p-2 shadow-sm rounded-3 h-100" data-bs-toggle="tooltip"
+          title="View your activity, token balance, and how much you’ve staked.">
+          <div class="icon fs-4 mb-1"><i class="fas fa-briefcase"></i></div>
           <h6 class="mb-1 fs-6">Portfolio</h6>
-          <p class="text-muted small mb-0">View your wallet activity.</p>
+          <p class="text-muted small mb-0">See your transaction history, token balance, and staking progress.</p>
         </div>
       </div>
 
       <div class="col-lg-2 col-md-3 col-6">
-        <div class="step-card p-2 shadow-sm rounded-3 h-100">
-          <div class="icon fs-4 mb-1">🔁</div>
+        <div class="step-card p-2 shadow-sm rounded-3 h-100" data-bs-toggle="tooltip"
+          title="Buy, sell, or stake XEAM tokens right from your wallet.">
+          <div class="icon fs-4 mb-1"><i class="fas fa-sync-alt"></i></div>
           <h6 class="mb-1 fs-6">Trade</h6>
-          <p class="text-muted small mb-0">Buy/sell or stake tokens.</p>
+          <p class="text-muted small mb-0">Buy, sell, or stake your XEAM tokens directly from your wallet.</p>
         </div>
       </div>
     </div>
 
-    <a href="/dapp" class="btn btn-outline-primary btn-sm mt-3">Launch DApp</a>
+    <a href="/dapp" class="btn btn-outline-primary btn-sm mt-3">🚀 Launch the XEAM DApp</a>
   </div>
 </section>
-
 
 
 <section class="container my-5">
@@ -165,10 +178,23 @@
     <!-- TOKENOMICS -->
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header">💰 XEAM Tokenomics</div>
+        <div class="card-header" data-bs-toggle="tooltip"
+          title="Tokenomics = How the tokens are created, distributed, and used.">
+          💰 XEAM Tokenomics
+        </div>
         <div class="card-body">
           <h5>How Does XEAM Work?</h5>
-          <p>XEAM Token has a total supply of 2M with allocations for development, staking, and the Encouragement Fund.</p>
+          <p>
+            XEAM Token has a total supply of <strong data-bs-toggle="tooltip"
+              title="This is the maximum number of XEAM tokens that will ever exist.">2M</strong>
+            with allocations for
+            <span data-bs-toggle="tooltip"
+              title="Funds reserved for development and updates to the project.">development</span>,
+            <span data-bs-toggle="tooltip" title="Staking means locking your tokens to earn rewards.">staking</span>,
+            and the
+            <span data-bs-toggle="tooltip"
+              title="A wallet that collects 4% of each transaction and donates to charity.">Encouragement Fund</span>.
+          </p>
           <canvas id="tokenomicsChart" width="400" height="400"></canvas>
         </div>
       </div>
@@ -185,7 +211,7 @@
               <p>Initial launch completed.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
             <span class="dot"></span>
             <div class="content">
@@ -193,7 +219,7 @@
               <p>XEAM Token deployed on Ethereum mainnet.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
             <span class="dot"></span>
             <div class="content">
@@ -201,7 +227,7 @@
               <p>Liquidity secured on Uniswap.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
             <span class="dot"></span>
             <div class="content">
@@ -209,7 +235,7 @@
               <p>Burn mechanism active for supply control.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="400">
             <span class="dot"></span>
             <div class="content">
@@ -217,7 +243,7 @@
               <p>Pending CoinMarketCap and CoinGecko approval.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="500">
             <span class="dot"></span>
             <div class="content">
@@ -225,7 +251,7 @@
               <p>Security audit with third-party provider.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="600">
             <span class="dot"></span>
             <div class="content">
@@ -233,7 +259,7 @@
               <p>Governance and rewards via staking mechanisms.</p>
             </div>
           </div>
-    
+
           <div class="timeline-item" data-aos="fade-up" data-aos-delay="700">
             <span class="dot"></span>
             <div class="content">
@@ -244,8 +270,8 @@
         </div>
       </div>
     </section>
-    
-    
+
+
 
   </div>
 </section>
@@ -255,44 +281,102 @@
   <div class="container">
     <div class="card p-4 shadow-sm hover-card" data-aos="fade-right">
       <h2 class="mb-4 fw-bold text-center neon-glow">🌍 What Problem Are We Solving?</h2>
-      <p class="lead text-center">Traditional fundraising is limited by geography, bureaucracy, and a lack of transparency.</p>
-      <p class="mb-0 text-center">XEAM leverages blockchain to create unstoppable, transparent, and global passive income streams for NGOs and food banks — powered by every transaction.</p>
+      <p class="lead text-center">
+        Traditional fundraising often struggles with slow processes, limited reach, and a lack of transparency.
+      </p>
+      <p class="mb-0 text-center">
+        XEAM uses blockchain technology to change that — creating fast, transparent, and unstoppable income streams that
+        support NGOs and food banks around the world, with every transaction contributing to real impact.
+      </p>
     </div>
   </div>
 </section>
+
 
 <!-- 🛡️ Emergency Fund + DAO Voting -->
 <section class="py-5">
   <div class="container">
     <div class="card p-4 shadow-sm hover-card text-center" data-aos="fade-right" data-aos-delay="100">
       <h2 class="fw-bold mb-3">🛡️ Community Governance & Emergency Fund</h2>
-      <p class="mb-3">1% of all transactions are held in an emergency fund controlled by a DAO, empowering the community to vote on impactful initiatives.</p>
-      <a href="#" class="btn btn-outline-primary btn-sm">View DAO Voting Platform</a>
+      <p class="mb-3">
+        XEAM sets aside <strong>1% of every transaction</strong> into a secure emergency fund. This fund is managed by
+        the community using a decentralized voting system (DAO), where token holders can propose and vote on how the
+        funds are used — whether it's for urgent aid, new initiatives, or supporting critical causes.
+      </p>
+      <a href="#" class="btn btn-outline-primary btn-sm">🗳️ View DAO Voting Platform</a>
     </div>
   </div>
 </section>
+
 
 <!-- 💡 Inspire Mechanism -->
 <section class="py-5">
   <div class="container">
     <div class="card p-4 shadow-sm hover-card text-center" data-aos="fade-right" data-aos-delay="200">
       <h2 class="fw-bold mb-3">💡 The Inspire Mechanism</h2>
-      <p class="mb-4">A unique contract feature that accumulates LP tokens to grow liquidity organically while allowing for long-term stability and investor protection.</p>
+      <p class="mb-4">
+        The Inspire Mechanism is a built-in feature of the XEAM smart contract that helps grow and stabilize the project
+        over time.
+        It works by automatically collecting a small portion of each transaction in the form of Liquidity Provider (LP)
+        tokens.
+        These tokens are added back into the liquidity pool, increasing trading stability and making XEAM harder to
+        manipulate by big buyers or sellers.
+      </p>
+      <p class="mb-4">
+        This self-sustaining system ensures the project remains healthy, while also supporting long-term holders and
+        building trust among investors.
+      </p>
       <p class="small text-muted">Inspired liquidity, inspired giving.</p>
     </div>
   </div>
 </section>
+
 
 <!-- 🔐 Token Security Overview -->
 <section class="py-5">
   <div class="container">
     <div class="card p-4 shadow-sm hover-card" data-aos="fade-right" data-aos-delay="300">
       <h2 class="mb-4 text-center">🔐 Token Safety & Trust</h2>
+      <p class="text-center mb-4">
+        XEAM was built with long-term protection in mind. These security features help prevent abuse, build investor
+        confidence, and keep the ecosystem healthy and fair for everyone.
+      </p>
       <div class="row g-3 text-center">
-        <div class="col-md-3"><div class="card p-3 hover-card">🚫 Antibot Protection</div></div>
-        <div class="col-md-3"><div class="card p-3 hover-card">🔄 Max Tx: 0.05%</div></div>
-        <div class="col-md-3"><div class="card p-3 hover-card">👛 Max Wallet: 1%</div></div>
-        <div class="col-md-3"><div class="card p-3 hover-card">🔒 LP Locked 10 Years</div></div>
+        <div class="col-md-3">
+          <div class="card p-3 hover-card h-100">
+            <h6 class="mb-2">🚫 Antibot Protection</h6>
+            <p class="small text-muted mb-0">
+              Stops bots from buying early or unfairly trading the token. Keeps the launch and trading fair for real
+              users.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 hover-card h-100">
+            <h6 class="mb-2">🔄 Max Tx: 0.05%</h6>
+            <p class="small text-muted mb-0">
+              Limits how much can be traded at once to prevent price manipulation or sudden dumps by large holders.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 hover-card h-100">
+            <h6 class="mb-2">👛 Max Wallet: 1%</h6>
+            <p class="small text-muted mb-0">
+              No single wallet can hold more than 1% of the total supply, reducing the risk of whales controlling the
+              project.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 hover-card h-100">
+            <h6 class="mb-2">🔒 LP Locked 10 Years</h6>
+            <p class="small text-muted mb-0">
+              Liquidity is locked for a decade, meaning it can’t be withdrawn or “rug-pulled” — giving long-term peace
+              of mind.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -304,47 +388,60 @@
       <h5 class="mb-0"><i class="fas fa-chart-line"></i> XEAM Staking Rewards & Tier System</h5>
     </div>
     <div class="card-body">
-      <p>Your staking rewards are based on your tier level. The more XEAM you stake, the higher your tier – and the better your reward multiplier.</p>
+      <p>
+        By staking your XEAM tokens, you're helping support the network and charitable efforts — and earning rewards in
+        return.
+        The more tokens you stake, the higher your reward tier, and the more XEAM you can passively earn over time.
+      </p>
+      <p class="small text-muted">
+        This system rewards long-term holders and active supporters by boosting their earnings based on their staking
+        tier.
+      </p>
 
       <!-- Grid-style tiers -->
       <div class="row g-3">
         <div class="col-12 col-md-6 col-lg-4">
           <div class="border rounded p-3 h-100 text-center bg-dark text-white">
-            <h6>🧱 Base</h6>
+            <h6>🧱 Base Tier</h6>
             <p class="mb-1"><strong>Requirement:</strong> Less than 50 XEAM</p>
             <span class="badge bg-secondary">x 0</span>
+            <p class="small mt-2 text-muted">No rewards yet — stake more to start earning!</p>
           </div>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
           <div class="border rounded p-3 h-100 text-center bg-dark text-white">
-            <h6>🚀 Bronze</h6>
+            <h6>🚀 Bronze Tier</h6>
             <p class="mb-1"><strong>Requirement:</strong> 50+ XEAM</p>
             <span class="badge bg-warning text-dark">x 1.0</span>
+            <p class="small mt-2 text-muted">Start earning rewards with a 1x multiplier.</p>
           </div>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
           <div class="border rounded p-3 h-100 text-center bg-dark text-white">
-            <h6>🔥 Silver</h6>
+            <h6>🔥 Silver Tier</h6>
             <p class="mb-1"><strong>Requirement:</strong> 250+ XEAM</p>
             <span class="badge bg-warning text-dark">x 1.2</span>
+            <p class="small mt-2 text-muted">Boost your rewards with a 20% multiplier.</p>
           </div>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
           <div class="border rounded p-3 h-100 text-center bg-dark text-white">
-            <h6>🌟 Gold</h6>
+            <h6>🌟 Gold Tier</h6>
             <p class="mb-1"><strong>Requirement:</strong> 500+ XEAM</p>
             <span class="badge bg-warning text-dark">x 1.5</span>
+            <p class="small mt-2 text-muted">Enjoy even better returns with a 50% bonus.</p>
           </div>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
           <div class="border rounded p-3 h-100 text-center bg-dark text-white">
-            <h6>💎 Diamond</h6>
+            <h6>💎 Diamond Tier</h6>
             <p class="mb-1"><strong>Requirement:</strong> 1000+ XEAM</p>
             <span class="badge bg-primary">x 2.0</span>
+            <p class="small mt-2 text-muted">Top-tier rewards: double your staking returns.</p>
           </div>
         </div>
       </div>
@@ -353,28 +450,45 @@
 </div>
 
 
-
 <!-- 📜 Download White Paper -->
 <section class="py-5">
   <div class="container">
     <div class="card p-4 shadow-sm hover-card text-center" data-aos="fade-right" data-aos-delay="400">
-      <h2 class="fw-bold mb-3">📜 Read Our Vision</h2>
-      <p class="mb-3">Dive into the full Encouragement Token white paper to understand the tokenomics, philosophy, and roadmap.</p>
-      <a href="{% static 'docs/XEAM_Whitepaper.pdf' %}" class="btn btn-outline-info">📄 Download White Paper</a>
+      <h2 class="fw-bold mb-3">📜 Discover the XEAM Vision</h2>
+      <p class="mb-3">
+        Want to understand exactly how XEAM works behind the scenes?<br>
+        Our white paper lays out everything — from token supply and staking rewards to our mission, roadmap, and charity
+        model.
+      </p>
+      <p class="text-muted small">
+        Perfect for curious investors, crypto newcomers, and nonprofit supporters alike.
+      </p>
+      <a href="{% static 'docs/XEAM_Whitepaper.pdf' %}" class="btn btn-outline-info mt-2">
+        📄 Download the XEAM White Paper
+      </a>
     </div>
   </div>
 </section>
+
 
 <!-- 👥 Founding Story / Meet the Team -->
 <section class="py-5">
   <div class="container">
     <div class="card p-4 shadow-sm hover-card text-center" data-aos="fade-right" data-aos-delay="500">
       <h2 class="fw-bold mb-4">👥 Our Story</h2>
-      <p class="mb-3">Born during the crypto bear market in Dublin, XEAM was built on resilience, empathy, and the belief that every block can empower hope.</p>
-      <p class="text-muted">Backed by developers, designers, and NGO supporters who believe in blockchain for good.</p>
+      <p class="mb-3">
+        XEAM was born in Dublin during the depths of the crypto bear market — not just as a token, but as a mission.
+        Inspired by compassion, resilience, and a desire to make Web3 meaningful, we asked: <em>“What if blockchain
+          could do more than build wealth — what if it could build hope?”</em>
+      </p>
+      <p class="text-muted">
+        Today, XEAM is backed by a global team of developers, designers, and nonprofit advocates working together to
+        reshape how generosity flows in the digital world.
+      </p>
     </div>
   </div>
 </section>
+
 
 <!-- 💖 XEAM x The Giving Block Partnership -->
 <section class="py-5">
@@ -382,28 +496,33 @@
     <div class="card p-4 shadow-sm hover-card text-center" data-aos="fade-right" data-aos-delay="800">
       <h2 class="fw-bold mb-4 neon-glow">💖 XEAM x The Giving Block</h2>
       <p class="lead mb-4">
-        <strong>4% of every XEAM transaction</strong> is automatically allocated to the 
-        <span class="text-info">Encouragement Fund Wallet</span>, which periodically donates to 
-        <a href="https://thegivingblock.com" target="_blank" class="link-info fw-bold">The Giving Block</a>.
+        <strong>Every time someone buys, sells, or trades XEAM tokens,</strong> 4% of that transaction is
+        automatically sent to the <span class="text-info">Encouragement Fund Wallet</span>. This wallet donates
+        regularly
+        to <a href="https://thegivingblock.com" target="_blank" class="link-info fw-bold">The Giving Block</a>, a
+        platform
+        supporting global nonprofits.
       </p>
 
       <!-- Logo Row -->
       <div class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4 gap-4">
         <!-- XEAM Logo -->
         <div class="token-logo text-center">
-          <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp" 
-               alt="XEAM Token" style="height: 80px;">
+          <img
+            src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
+            alt="XEAM Token" style="height: 80px;">
           <p class="small mt-2">XEAM Token</p>
         </div>
 
         <!-- Link Icon -->
-        <div style="font-size: 2rem;">🔗</div>
+        <div style="font-size: 2rem;"><i class="fas fa-link text-muted"></i></div>
 
-        <!-- Giving Block Logo (Your Cloudinary Hosted Image) -->
+        <!-- Giving Block Logo -->
         <div class="givingblock-logo text-center">
           <a href="https://thegivingblock.com" target="_blank">
-            <img src="https://res.cloudinary.com/dhx65uemx/image/upload/v1743282259/The_Giving_Block_idDPdbNxcG_0_nptkwh.png" 
-                 alt="The Giving Block Logo" style="height: 60px;">
+            <img
+              src="https://res.cloudinary.com/dhx65uemx/image/upload/v1743282259/The_Giving_Block_idDPdbNxcG_0_nptkwh.png"
+              alt="The Giving Block Logo" style="height: 60px;">
           </a>
           <p class="small mt-2">The Giving Block</p>
         </div>
@@ -412,16 +531,19 @@
       <!-- Value Props -->
       <div class="row justify-content-center g-4 text-start">
         <div class="col-md-4">
-          <h5 class="text-info">🔁 Auto-Funded</h5>
-          <p class="small">4% of every XEAM transaction is routed via smart contract to the charity wallet.</p>
+          <h5 class="text-info">🔁 Automated Giving</h5>
+          <p class="small">No action is needed—charity donations are baked into every transaction through smart contract
+            logic.</p>
         </div>
         <div class="col-md-4">
-          <h5 class="text-info">🌍 Nonprofit Impact</h5>
-          <p class="small">Funds support housing, hunger relief, and mental health causes via The Giving Block.</p>
+          <h5 class="text-info">🌍 Global Nonprofit Support</h5>
+          <p class="small">Funds go to real causes: housing, hunger relief, education, and mental health projects
+            worldwide.</p>
         </div>
         <div class="col-md-4">
-          <h5 class="text-info">💡 Web3 Philanthropy</h5>
-          <p class="small">A future-forward model combining blockchain transparency and charitable giving.</p>
+          <h5 class="text-info">💡 Built for Transparency</h5>
+          <p class="small">Every donation is visible on the blockchain, giving contributors full transparency and
+            accountability.</p>
         </div>
       </div>
 
@@ -433,29 +555,30 @@
 </section>
 
 
-
 <!-- 🧠 Education Hub -->
 <section class="py-5">
   <div class="container">
     <div class="card p-4 shadow-sm hover-card text-center" data-aos="fade-right" data-aos-delay="600">
       <h2 class="fw-bold mb-4">🧠 Learn About Crypto & Giving</h2>
+      <p class="text-muted mb-4">New to crypto or blockchain? No problem. Here's where you can learn the basics and understand how XEAM connects technology with real-world impact.</p>
       <div class="row g-3">
         <div class="col-md-4">
-          <h5>📖 What is DeFi?</h5>
-          <p class="small">Understand the decentralized economy and why it matters.</p>
+          <h5><i class="fas fa-book-open me-2"></i>What is DeFi?</h5>
+          <p class="small">Discover how decentralized finance (DeFi) removes banks and middlemen—giving more control to users like you.</p>
         </div>
         <div class="col-md-4">
-          <h5>💸 Accepting Crypto Donations</h5>
-          <p class="small">A guide for NGOs entering Web3 philanthropy.</p>
+          <h5><i class="fas fa-donate me-2"></i>Accepting Crypto Donations</h5>
+          <p class="small">A simple guide for nonprofits to start receiving donations in crypto, securely and transparently.</p>
         </div>
         <div class="col-md-4">
-          <h5>🔍 Blockchain Transparency</h5>
-          <p class="small">See how donations are tracked and verified in real-time.</p>
+          <h5><i class="fas fa-search-dollar me-2"></i>Blockchain Transparency</h5>
+          <p class="small">Learn how the blockchain keeps every donation traceable and visible to the public, building trust in your impact.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
 
 <!-- 📈 Metrics Dashboard (Mocked Static Version) -->
 <section class="py-5">
@@ -488,7 +611,8 @@
 <section class="join-xeam-tech text-center text-white py-5">
   <div class="container">
     <h2 class="fw-bold mb-3">Join the XEAM Movement</h2>
-    <p class="mb-4 text-light">Empowering NGOs and food banks through blockchain technology and decentralized finance.</p>
+    <p class="mb-4 text-light">Empowering NGOs and food banks through blockchain technology and decentralized finance.
+    </p>
     <a href="https://uniswap.org" target="_blank" class="btn btn-glow">🚀 Get XEAM Token</a>
   </div>
 </section>
@@ -525,7 +649,7 @@
   </div>
 </footer>
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const replacements = {
       '🌐': '<i class="fas fa-globe"></i>',
       '🤝': '<i class="fas fa-handshake"></i>',
@@ -576,5 +700,13 @@
       }
     });
   });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  });
 </script>
+
 {% endblock %}

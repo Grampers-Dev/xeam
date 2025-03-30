@@ -623,3 +623,8 @@ img.logo-image {
       .text-muted {
         color: #ffffff !important;
       }
+
+      .bg-info {
+        --bs-bg-opacity: 1;
+        background-color: rgba(13, 11, 31, 0.8) !important;
+    }
