@@ -24,10 +24,10 @@
       </ul>
       <div class="d-flex align-items-center gap-2">
         {% if user.is_authenticated %}
-          <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
-          <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
+        <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
         {% else %}
-          <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
         {% endif %}
         <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
       </div>
@@ -49,9 +49,10 @@
         </div>
         <div class="card-body text-center">
           {% if request.user.user_profile.image %}
-            <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}" class="img-fluid rounded-circle mb-3 profile-image" style="width: 120px;">
+          <img src="{{ request.user.user_profile.image.url }}" alt="{{ request.user.username }}"
+            class="img-fluid rounded-circle mb-3 profile-image" style="width: 120px;">
           {% else %}
-            <i class="fas fa-user-circle fa-4x mb-3 text-muted"></i>
+          <i class="fas fa-user-circle fa-4x mb-3 text-muted"></i>
           {% endif %}
           <h5>{{ request.user.username }}</h5>
           <ul class="list-group text-start mt-3">
@@ -63,7 +64,8 @@
             <li class="list-group-item">Num of Posts: <strong>{{ user.reply_set.count }}</strong></li>
             <li class="list-group-item">Join Date: <strong>{{ user.date_joined }}</strong></li>
           </ul>
-          <button id="editProfileBtn" class="btn btn-outline-primary mt-3"><i class="fas fa-edit"></i> Edit Profile</button>
+          <button id="editProfileBtn" class="btn btn-outline-primary mt-3"><i class="fas fa-edit"></i> Edit
+            Profile</button>
         </div>
       </div>
     </div>
@@ -109,49 +111,51 @@
 
 
 
-<!-- ROW 3: STAKING DASHBOARD -->
-<div class="row g-4 mt-4">
-  <div class="col-12">
-    <div class="card shadow-sm border-warning">
-      <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0">📈 XEAM Staking Dashboard</h5>
-      </div>
-      <div class="card-body text-center">
-        <p>Stake your XEAM tokens to earn rewards and support charitable causes.</p>
+  <!-- ROW 3: STAKING DASHBOARD -->
+  <div class="row g-4 mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-warning">
+        <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0">📈 XEAM Staking Dashboard</h5>
+        </div>
+        <div class="card-body text-center">
+          <p>Stake your XEAM tokens to earn rewards and support charitable causes.</p>
 
-        <!-- Wallet & Balance -->
-        <div class="mb-2 text-muted">
-          Wallet: <code id="stakingWallet">0x...loading</code>
-        </div>
-        <div class="mb-3">
-          Available Balance: <strong id="availableBalance">--</strong> XEAM
-        </div>
+          <!-- Wallet & Balance -->
+          <div class="mb-2 text-muted">
+            Wallet: <code id="stakingWallet">0x...loading</code>
+          </div>
+          <div class="mb-3">
+            Available Balance: <strong id="availableBalance">--</strong> XEAM
+          </div>
 
-        <!-- Staking Input -->
-        <div class="mb-2">
-          <input type="number" id="stakeAmount" class="form-control" placeholder="Enter amount to stake" min="1">
-        </div>
-        <div class="d-flex justify-content-center gap-2 flex-wrap">
-          <button class="btn btn-warning" id="stakeBtn">
-            <i class="fas fa-lock"></i> Stake XEAM
-          </button>
-          <button class="btn btn-outline-secondary" id="unstakeBtn">
-            <i class="fas fa-unlock"></i> Unstake
-          </button>
-        </div>
+          <!-- Staking Input -->
+          <div class="mb-2">
+            <input type="number" id="stakeAmount" class="form-control" placeholder="Enter amount to stake" min="1">
+          </div>
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <button class="btn btn-warning" id="stakeBtn">
+              <i class="fas fa-lock"></i> Stake XEAM
+            </button>
+            <button class="btn btn-outline-secondary" id="unstakeBtn">
+              <i class="fas fa-unlock"></i> Unstake
+            </button>
+          </div>
 
-        <!-- Rewards -->
-        <div class="mt-4" id="stakingFeedback" style="display: none;">
-          <h6 class="mb-1">🏆 <strong>Tier:</strong> <span id="tierLabel">--</span></h6>
-          <h6 class="mb-1">💰 <strong>Est. Reward:</strong> <span id="estimatedReward">--</span> XEAM</h6>
-        </div>
+          <!-- Rewards -->
+          <div class="mt-4" id="stakingFeedback" style="display: none;">
+            <h6 class="mb-1">🏆 <strong>Tier:</strong> <span id="tierLabel">--</span></h6>
+            <h6 class="mb-1">💰 <strong>Est. Reward:</strong> <span id="estimatedReward">--</span> XEAM</h6>
+            <h6 class="mb-1">🔁 <strong>Multiplier:</strong> <span id="multiplierLabel">--</span>x</h6>
+          </div>
 
-        <!-- Status Message -->
-        <div id="stakingStatus" class="mt-3 text-info"></div>
+
+          <!-- Status Message -->
+          <div id="stakingStatus" class="mt-3 text-info"></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 <!-- ROW 4: Tier System Explanation -->
 <div class="row g-4 mt-4">
@@ -163,7 +167,7 @@
       </div>
       <div class="card-body">
         <p class="mb-3">Your staking rewards are based on your tier level. The more you stake, the higher your tier — and the better your reward multiplier:</p>
-        
+
         <div class="table-responsive">
           <table class="table table-bordered text-center align-middle mb-0" style="background-color: #0d0c22;">
             <thead class="table-dark">
@@ -175,28 +179,27 @@
             </thead>
             <tbody>
               <tr>
-                <td>🧱 Base</td>
+                <td><i class="fas fa-cube text-secondary"></i> Base</td>
                 <td>Less than 50 XEAM</td>
                 <td><span class="badge bg-secondary">× 0</span></td>
               </tr>
               <tr>
-                <td>🚀 Bronze</td>
+                <td><i class="fas fa-rocket text-warning"></i> Bronze</td>
                 <td>50+ XEAM</td>
                 <td><span class="badge bg-warning text-dark">× 1.0</span></td>
               </tr>
               <tr>
-                <td>🔥 Silver</td>
+                <td><i class="fas fa-fire text-danger"></i> Silver</td>
                 <td>250+ XEAM</td>
-                <td><span class="badge bg-warning text-dark text-nowrap">x1.2</span>
-                </td>
+                <td><span class="badge bg-warning text-dark">× 1.2</span></td>
               </tr>
               <tr>
-                <td>🌟 Gold</td>
+                <td><i class="fas fa-star text-warning"></i> Gold</td>
                 <td>500+ XEAM</td>
                 <td><span class="badge bg-warning">× 1.5</span></td>
               </tr>
               <tr>
-                <td>💎 Diamond</td>
+                <td><i class="fas fa-gem text-primary"></i> Diamond</td>
                 <td>1000+ XEAM</td>
                 <td><span class="badge bg-primary">× 2.0</span></td>
               </tr>
@@ -211,87 +214,119 @@
 
 
 
-<!-- FOOTER -->
-<footer class="footer mt-5">
-  <div>
-    <h5>Token Radar</h5>
-    <p>Revolutionizing crypto analytics and blockchain transparency.</p>
-  </div>
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div>
+      <h5>Token Radar</h5>
+      <p>Revolutionizing crypto analytics and blockchain transparency.</p>
+    </div>
 
-  <div class="footer-links">
-    <h5>Links</h5>
-    <a href="#">How it works</a><br>
-    <a href="#">Cryptos</a><br>
-    <a href="#">Features</a><br>
-  </div>
+    <div class="footer-links">
+      <h5>Links</h5>
+      <a href="#">How it works</a><br>
+      <a href="#">Cryptos</a><br>
+      <a href="#">Features</a><br>
+    </div>
 
-  <div>
-    <h5>Newsletter</h5>
-    <input type="email" placeholder="Enter your email">
-    <button class="subscribe-btn">Subscribe</button>
-  </div>
+    <div>
+      <h5>Newsletter</h5>
+      <input type="email" placeholder="Enter your email">
+      <button class="subscribe-btn">Subscribe</button>
+    </div>
 
-  <div class="footer-social mt-3">
-    <h5>Follow Us</h5>
-    <a href="https://twitter.com/yourhandle" target="_blank"><i class="fab fa-x-twitter"></i></a>
-    <a href="https://t.me/yourgroup" target="_blank"><i class="fab fa-telegram"></i></a>
-    <a href="https://discord.gg/yourserver" target="_blank"><i class="fab fa-discord"></i></a>
-    <a href="https://github.com/yourrepo" target="_blank"><i class="fab fa-github"></i></a>
-    <a href="https://linkedin.com/in/yourprofile" target="_blank"><i class="fab fa-linkedin"></i></a>
-  </div>
-</footer>
+    <div class="footer-social mt-3">
+      <h5>Follow Us</h5>
+      <a href="https://twitter.com/yourhandle" target="_blank"><i class="fab fa-x-twitter"></i></a>
+      <a href="https://t.me/yourgroup" target="_blank"><i class="fab fa-telegram"></i></a>
+      <a href="https://discord.gg/yourserver" target="_blank"><i class="fab fa-discord"></i></a>
+      <a href="https://github.com/yourrepo" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank"><i class="fab fa-linkedin"></i></a>
+    </div>
+  </footer>
 
 
-<script>
-  document.getElementById('editProfileBtn')?.addEventListener('click', function() {
-    const form = document.getElementById('editProfileForm');
-    if (form.style.display === 'none') {
-      form.style.display = 'block';
-      this.textContent = 'Cancel Edit';
-    } else {
-      form.style.display = 'none';
-      this.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
-    }
-  });
+  <script>
+    document.getElementById('editProfileBtn')?.addEventListener('click', function () {
+      const form = document.getElementById('editProfileForm');
+      if (form.style.display === 'none') {
+        form.style.display = 'block';
+        this.textContent = 'Cancel Edit';
+      } else {
+        form.style.display = 'none';
+        this.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const stakeBtn = document.getElementById("stakeBtn");
+      if (!stakeBtn) return;
+
+      stakeBtn.addEventListener("click", async () => {
+        const amount = parseFloat(document.getElementById("stakeAmount").value);
+        if (!amount || amount <= 0) {
+          document.getElementById("stakingStatus").textContent = "Please enter a valid amount.";
+          return;
+        }
+
+        let tier = "🧱 Base";
+        let multiplier = 1.0;
+
+        if (amount >= 1000) {
+          tier = "💎 Diamond";
+          multiplier = 2.0;
+        } else if (amount >= 500) {
+          tier = "🌟 Gold";
+          multiplier = 1.5;
+        } else if (amount >= 250) {
+          tier = "🔥 Silver";
+          multiplier = 1.2;
+        } else if (amount >= 50) {
+          tier = "🚀 Bronze";
+          multiplier = 1.0;
+        }
+
+        const rewardPool = 100000;
+        const estimated = (amount * multiplier).toFixed(2);
+
+        document.getElementById("tierLabel").textContent = tier;
+        document.getElementById("estimatedReward").textContent = estimated;
+        document.getElementById("multiplierLabel").textContent = multiplier.toFixed(1);
+        document.getElementById("stakingFeedback").style.display = "block";
+      });
+    });
+
+    const emojiToFA = {
+    "🎁": "fas fa-gift",
+    "📈": "fas fa-chart-line",
+    "🏆": "fas fa-trophy",
+    "💰": "fas fa-coins",
+    "🔁": "fas fa-sync-alt",
+    "🧱": "fas fa-cube",
+    "🚀": "fas fa-rocket",
+    "🔥": "fas fa-fire",
+    "🌟": "fas fa-star",
+    "💎": "fas fa-gem"
+  };
 
   document.addEventListener("DOMContentLoaded", () => {
-    const stakeBtn = document.getElementById("stakeBtn");
-    if (!stakeBtn) return;
+    Object.keys(emojiToFA).forEach(emoji => {
+      document.querySelectorAll("*").forEach(el => {
+        if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+          const trimmed = el.textContent.trim();
+          if (trimmed === emoji) {
+            el.innerHTML = `<i class="${emojiToFA[emoji]}"></i>`;
+          }
+        }
+      });
 
-    stakeBtn.addEventListener("click", async () => {
-      const amount = parseFloat(document.getElementById("stakeAmount").value);
-      if (!amount || amount <= 0) {
-        document.getElementById("stakingStatus").textContent = "Please enter a valid amount.";
-        return;
+      // Replace emojis inside tier labels too
+      const tierLabel = document.getElementById("tierLabel");
+      if (tierLabel && tierLabel.textContent.includes(emoji)) {
+        tierLabel.innerHTML = tierLabel.textContent.replace(emoji, `<i class="${emojiToFA[emoji]}"></i>`);
       }
-
-      let tier = "🧱 Base";
-      let multiplier = 1.0;
-
-      if (amount >= 1000) {
-        tier = "💎 Diamond";
-        multiplier = 2.0;
-      } else if (amount >= 500) {
-        tier = "🌟 Gold";
-        multiplier = 1.5;
-      } else if (amount >= 250) {
-        tier = "🔥 Silver";
-        multiplier = 1.2;
-      } else if (amount >= 50) {
-        tier = "🚀 Bronze";
-        multiplier = 1.0;
-      }
-
-      const rewardPool = 100000;
-      const estimated = (amount * multiplier).toFixed(2);
-
-      document.getElementById("tierLabel").textContent = tier;
-      document.getElementById("estimatedReward").textContent = estimated;
-      document.getElementById("stakingFeedback").style.display = "block";
     });
   });
 
-</script>
+  </script>
 
-{% endblock %}
-
+  {% endblock %}
