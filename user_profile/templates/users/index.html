@@ -2,6 +2,75 @@
 {% block body %}
 {% load static %}
 
+<style>
+  body {
+    background-color: #0d0b1f;
+    color: #fff;
+  }
+
+  .card,
+  .navbar,
+  .btn,
+  .timeline,
+  .feature-card,
+  .hover-card {
+    background-color: #14121f !important;
+    color: #fff !important;
+    border-color: #29263d !important;
+  }
+
+  .btn.btn-glow {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    box-shadow: 0 0 15px #ff4b2b66;
+    transition: 0.3s;
+  }
+
+  .btn.btn-glow:hover {
+    box-shadow: 0 0 25px #ff4b2b99;
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    background-color: #1e1c2d !important;
+    color: #fff !important;
+  }
+
+  .neon-glow {
+    color: #00f6ff;
+    text-shadow: 0 0 5px #00f6ff, 0 0 10px #00f6ff;
+  }
+
+  .navbar-light.bg-light {
+    background-color: #14121f !important;
+    border-bottom: 1px solid #29263d;
+  }
+
+  .nav-link,
+  .navbar-brand {
+    color: #fff !important;
+  }
+
+  .nav-link:hover {
+    color: #00f6ff !important;
+  }
+
+  .feature-card,
+  .hover-card,
+  .step-card {
+    background-color: #1a1829;
+    border: 1px solid #29263d;
+  }
+
+  .feature-card .icon,
+  .step-card .icon {
+    color: #00f6ff;
+  }
+</style>
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
@@ -37,7 +106,8 @@
         {% else %}
         <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
         {% endif %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'whitepaper' %}">Whitepaper</a></li>
+        <a class="nav-link" href="{% url 'whitepaper' %}"><i class="fas fa-scroll"></i> Whitepaper</a>
+
 
         <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
         <button id="theme-toggle" class="btn btn-outline-secondary btn-sm" title="Toggle Dark Mode">
@@ -714,6 +784,8 @@
       return new bootstrap.Tooltip(tooltipTriggerEl);
     });
   });
+
+  
 </script>
 
 {% endblock %}
