@@ -15,6 +15,8 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
 
     path('log-stake/', views.log_stake, name='log_stake'),
+    path('whitepaper/', views.whitepaper, name='whitepaper'),
+
 
     path('login/', auth_views.LoginView.as_view(template_name=
     'users/login.html', authentication_form=ExtendedAuthenticationForm), 

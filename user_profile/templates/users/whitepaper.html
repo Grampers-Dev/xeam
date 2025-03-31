@@ -1,0 +1,184 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="z-index: 10; position: relative;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
+           alt="XEAM Token Logo" class="logo-main" style="height: 40px;">
+      XEAM
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Tokenomics</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Roadmap</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-coins"></i> Staking</a>
+        <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+        <a class="nav-link" href="{% url 'whitepaper' %}">Whitepaper</a>
+        <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
+        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm" title="Toggle Dark Mode">🌓</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Whitepaper Content -->
+<section class="py-5" style="min-height: 100vh; position: relative; z-index: 2;">
+  <div class="container">
+    <div class="card shadow-sm p-4" style="background-color: #1a1a2e;">
+      <h1 class="text-center fw-bold mb-4">📜 XEAM White Paper</h1>
+      <p class="lead text-center text-muted mb-5">
+        A beginner-friendly breakdown of the mission, mechanics, and impact behind the Encouragement Token (XEAM).
+      </p>
+
+      <!-- Abstract -->
+      <section class="mb-5">
+        <h3 class="fw-bold">What is XEAM?</h3>
+        <p>
+          XEAM is a digital token — a form of cryptocurrency — designed to create steady and transparent streams of income that go directly to charities like food banks and NGOs (non-governmental organizations). Whenever people use or trade XEAM, a portion of each transaction supports these causes automatically.
+        </p>
+      </section>
+
+      <!-- Tokenomics -->
+      <section class="mb-5">
+        <h3 class="fw-bold">Where the Tokens Go ("Tokenomics")</h3>
+        <p>We created 2 million XEAM tokens. Here’s how they’re split up:</p>
+        <ul>
+          <li><strong>Development (5.5%):</strong> Building and improving the tech.</li>
+          <li><strong>Marketing (16.7%):</strong> Spreading awareness of XEAM.</li>
+          <li><strong>Staking (14.1%):</strong> Rewards for users who lock up (stake) their tokens.</li>
+          <li><strong>Liquidity Pool (50%):</strong> Ensures XEAM can always be traded easily.</li>
+          <li><strong>Encouragement Fund (4%):</strong> Goes directly to verified charities.</li>
+          <li><strong>Emergency Fund (1%):</strong> Used in case of crisis, managed by community votes.</li>
+          <li><strong>Inspire (5.2%):</strong> Helps maintain and grow the liquidity pool.</li>
+          <li><strong>Eco/Ops (3.5%):</strong> Ecosystem and operations support.</li>
+        </ul>
+      </section>
+
+      <!-- Transaction Fees -->
+      <section class="mb-5">
+        <h3 class="fw-bold">Transaction Fees — How We Fund the Mission</h3>
+        <p>When someone buys or sells XEAM, a small fee is added. This helps fund our goals.</p>
+        <p><strong>Buying XEAM = 10% fee</strong></p>
+        <ul>
+          <li>3% to liquidity</li>
+          <li>4% to charity fund</li>
+          <li>1% to growth</li>
+          <li>1% to operations</li>
+          <li>1% to emergency fund</li>
+        </ul>
+        <p><strong>Selling XEAM = 12% fee</strong></p>
+        <ul>
+          <li>4% to liquidity</li>
+          <li>4% to charity fund</li>
+          <li>2% to growth</li>
+          <li>1% to operations</li>
+          <li>1% to emergency fund</li>
+        </ul>
+        <p class="small text-muted">This fee structure keeps the token stable and supports the cause.</p>
+      </section>
+
+      <!-- Utilities -->
+      <section class="mb-5">
+        <h3 class="fw-bold">What You Can Do With XEAM</h3>
+        <ul>
+          <li><strong>Staking:</strong> Lock your XEAM and earn stablecoins (like USDC) as rewards.</li>
+          <li><strong>Support Charities:</strong> Every transaction helps nonprofits automatically.</li>
+          <li><strong>Emergency Fund:</strong> Our safety net, voted on by the community.</li>
+          <li><strong>Inspire:</strong> Boosts liquidity, making trading easier and smoother.</li>
+        </ul>
+      </section>
+
+      <!-- Roadmap -->
+      <section class="mb-5">
+        <h3 class="fw-bold">Where We’re Going</h3>
+        <h5>Phase One:</h5>
+        <ul>
+          <li>Launch website and socials</li>
+          <li>Smart contract audit</li>
+          <li>Listings on crypto sites (like CoinMarketCap)</li>
+          <li>Secure wallet managed by community (multi-sig)</li>
+        </ul>
+        <h5>Phase Two:</h5>
+        <ul>
+          <li>Official token launch</li>
+          <li>Staking and rewards go live</li>
+          <li>Community voting (DAO)</li>
+        </ul>
+        <h5>Phase Three:</h5>
+        <ul>
+          <li>Launch our NFT collection</li>
+        </ul>
+      </section>
+
+      <!-- Philosophy -->
+      <section class="mb-5">
+        <h3 class="fw-bold">Our Mission</h3>
+        <p>
+          We built XEAM during a difficult time for crypto markets, with the goal of doing real good. We believe blockchain can be used not just for profit — but to help people. XEAM redirects wealth into causes that matter.
+        </p>
+      </section>
+
+      <!-- Giving Block -->
+      <section class="mb-5">
+        <h3 class="fw-bold">Partnered with The Giving Block</h3>
+        <p>
+          XEAM is connected to <strong>The Giving Block</strong>, a platform that helps nonprofits accept crypto donations. Our crypto charity fund regularly donates to a wide list of vetted NGOs through them.
+        </p>
+      </section>
+
+      <!-- Final Word -->
+      <section>
+        <h3 class="fw-bold">Looking Ahead</h3>
+        <p>
+          XEAM is more than just a token. It’s a way to make Web3 meaningful. As the crypto world grows, so will our impact.
+        </p>
+        <p class="fw-semibold text-primary">Join the mission. XEAM ARMY, WAGMI (We’re All Gonna Make It).</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<style>
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto !important;
+  }
+
+  #vanta-bg {
+    pointer-events: none;
+    position: fixed;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  nav.navbar {
+    z-index: 10;
+    position: relative;
+  }
+</style>
+
+{% endblock %}
+

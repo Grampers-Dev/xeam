@@ -158,3 +158,5 @@ def log_stake(request):
         return JsonResponse({'status': 'success'})
     return JsonResponse({'error': 'invalid method'}, status=400)
 
+def whitepaper(request):
+    return render(request, 'users/whitepaper.html')

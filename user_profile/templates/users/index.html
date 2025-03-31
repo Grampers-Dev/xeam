@@ -22,20 +22,23 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
         </li>
-        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Tokenomics</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Roadmap</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#tokenomics">Tokenomics</a></li>
+        <li class="nav-item"><a class="nav-link" href="#roadmap">Roadmap</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
       </ul>
 
       <!-- Right-aligned buttons -->
       <div class="d-flex align-items-center gap-2">
         {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}" class="nav-link"><i class="far fa-user"></i> Profile</a>
+        <a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-coins"></i> Staking</a>
+
         <a href="{% url 'logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
         {% else %}
         <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
         {% endif %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'whitepaper' %}">Whitepaper</a></li>
+
         <button id="connect-wallet" class="btn btn-primary btn-sm">Connect Wallet</button>
         <button id="theme-toggle" class="btn btn-outline-secondary btn-sm" title="Toggle Dark Mode">
           🌓
@@ -74,7 +77,7 @@
 </div>
 
 
-<section class="features-container py-4">
+<section id="about" class="features-container py-4">
   <div class="container text-center">
     <h2 class="mb-3">Why XEAM?</h2>
     <p class="lead mb-4">
@@ -176,7 +179,7 @@
 </section>
 
 
-<section class="container my-5">
+<section id="tokenomics" class="container my-5">
   <div class="row">
 
     <!-- TOKENOMICS -->
@@ -204,7 +207,7 @@
       </div>
     </div>
 
-    <section class="roadmap-section py-5 bg-dark text-white">
+    <section id="roadmap" class="roadmap-section py-5 bg-dark text-white">
       <div class="container">
         <h2 class="text-center mb-5 fw-bold">🗺️ XEAM Roadmap</h2>
         <div class="timeline">
@@ -612,7 +615,7 @@
 </section>
 
 <!-- CALL TO ACTION -->
-<section class="join-xeam-tech text-center text-white py-5">
+<section id="contact" class="join-xeam-tech text-center text-white py-5">
   <div class="container">
     <h2 class="fw-bold mb-3">Join the XEAM Movement</h2>
     <p class="mb-4 text-light">Empowering NGOs and food banks through blockchain technology and decentralized finance.
