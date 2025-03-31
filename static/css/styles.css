@@ -628,3 +628,34 @@ img.logo-image {
         --bs-bg-opacity: 1;
         background-color: rgba(13, 11, 31, 0.8) !important;
     }
+
+    body.dark-mode {
+        background-color: #121212 !important;
+        color: #f1f1f1 !important;
+      }
+      
+      .dark-mode .card {
+        background-color: #1e1e1e;
+        color: #f1f1f1;
+      }
+      
+      .dark-mode .navbar,
+      .dark-mode .footer {
+        background-color: #1a1a1a;
+        color: #f1f1f1;
+      }
+      
+      .dark-mode .btn {
+        background-color: #343a40;
+        border-color: #343a40;
+        color: white;
+      }
+      
+      .dark-mode .btn:hover {
+        background-color: #495057;
+      }
+      
+      .dark-mode .icon i {
+        color: #f1f1f1 !important;
+      }
+      
