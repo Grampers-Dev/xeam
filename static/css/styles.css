@@ -357,6 +357,7 @@ img.logo-image {
       flex-direction: column;
       padding: 3rem 1rem;
       text-align: center;
+      margin-top: 50px;
     }
   
     .hero-text {
@@ -658,4 +659,18 @@ img.logo-image {
       .dark-mode .icon i {
         color: #f1f1f1 !important;
       }
+
+      .dropdown-menu {
+        background-color: #1a1829;
+        border: 1px solid #29263d;
+      }
+      .dropdown-item {
+        color: #fff;
+      }
+      .dropdown-item:hover {
+        background-color: #29263d;
+        color: #ff3c3c;
+      }
+      
+      
       

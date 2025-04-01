@@ -160,3 +160,6 @@ def log_stake(request):
 
 def whitepaper(request):
     return render(request, 'users/whitepaper.html')
+
+def presale_view(request):
+    return render(request, 'users/presale.html')

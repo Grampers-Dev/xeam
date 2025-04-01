@@ -16,7 +16,7 @@ urlpatterns = [
 
     path('log-stake/', views.log_stake, name='log_stake'),
     path('whitepaper/', views.whitepaper, name='whitepaper'),
-
+    path('presale/', views.presale_view, name='presale'),
 
     path('login/', auth_views.LoginView.as_view(template_name=
     'users/login.html', authentication_form=ExtendedAuthenticationForm), 
