@@ -170,7 +170,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Instead of 'xeam/static'
 ]
 
-LOGIN_REDIRECT_URL = 'index/'
+LOGIN_REDIRECT_URL = '/'
+
 
 
 # Default primary key field type
