@@ -10,6 +10,7 @@ from .forms import ExtendedAuthenticationForm
 #)
 
 urlpatterns = [
+    path('', views.index_view, name='home'),
     path('index/', views.index, name='index'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile_view, name='profile'),
