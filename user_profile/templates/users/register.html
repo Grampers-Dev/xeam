@@ -1,143 +1,120 @@
 {% extends 'users/base.html' %}
 {% block body %}
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+<!-- XEAM Style Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
+           alt="XEAM Token Logo" class="logo-main" style="height: 40px;">
+      XEAM
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-            </li>
-            {% endif %}
-        </ul>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Menu
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navMenuDropdown">
+            <li><a class="dropdown-item" href="#about">About</a></li>
+            <li><a class="dropdown-item" href="#tokenomics">Tokenomics</a></li>
+            <li><a class="dropdown-item" href="#roadmap">Roadmap</a></li>
+            <li><a class="dropdown-item" href="#contact">Contact</a></li>
+            <li><a class="dropdown-item" href="{% url 'presale' %}"><i class="fas fa-fire text-warning me-1"></i>Presale</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> Profile</a>
+          <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+          <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </nav>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6 col-lg-offset-3" id="loginBlock">
-            <div class="logo">
-                <div>
-                    <img src="https://res.cloudinary.com/dhx65uemx/image/upload/v1715630230/Tangle_hokbbr.svg" alt="Tangle Logo" class="logo-image">
-                </div>
-            </div>
-            <div class="pageTitle">Register</div>
-            
-            <form id="registration-form" action="{% url 'register' %}" method="POST" role="form">
-                {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
-                <div class="row pad">
-                    <div class="col-lg-8">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <!-- Explanation: Choose a unique username -->
-                            <small class="text-muted">Choose a unique username.</small>
-                            {{ form.username }}
-                            {% if form.username.errors %}
-                                <ul class="errorlist">
-                                    {% for error in form.username.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="password1">Password</label>
-                            <!-- Explanation: Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character. -->
-                            <small class="text-muted">Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.</small>
-                            {{ form.password1 }}
-                            {% if form.password1.errors %}
-                                <ul class="errorlist">
-                                    {% for error in form.password1.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <!-- Explanation: Enter your email address -->
-                            <small class="text-muted">Enter your email address.</small>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <ul class="errorlist">
-                                    {% for error in form.email.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="password2">Confirm Password</label>
-                            <!-- Explanation: Retype the password for confirmation -->
-                            <small class="text-muted">Retype the password for confirmation.</small>
-                            {{ form.password2 }}
-                            {% if form.password2.errors %}
-                                <ul class="errorlist">
-                                    {% for error in form.password2.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>  
-                    </div>
-                </div>
-                {% if form.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        <p>Your registration could not be completed due to the following errors:</p>
-                        <ul>
-                            {% for error in form.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            
-                <div class="row pad">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="glyphicon glyphicon-plus-sign"></i> Register
-                            </button>
-                            <a href="{% url 'login' %}" class="btn btn-link pull-right">
-                                Go to Login <i class="glyphicon glyphicon-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            
-            <footer>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="center">
-                            Copyright &copy; 2024 Tangle. All rights reserved.
-                        </div>
-                    </div>
-                </div>
-            </footer>
+<!-- Registration Form -->
+<div class="container-fluid mt-5 pt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6" id="loginBlock">
+      <div class="logo text-center mb-3">
+      </div>
 
+      <h2 class="text-center fw-bold mb-4">Register</h2>
+
+      <form id="registration-form" action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-group mb-3">
+          <label for="username">Username</label>
+          <small class="text-muted d-block mb-1">Choose a unique username.</small>
+          {{ form.username }}
+          {% for error in form.username.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
         </div>
-    </div>
-</div>
 
+        <div class="form-group mb-3">
+          <label for="email">Email Address</label>
+          <small class="text-muted d-block mb-1">Enter your email address.</small>
+          {{ form.email }}
+          {% for error in form.email.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password1">Password</label>
+          <small class="text-muted d-block mb-1">At least 8 characters with uppercase, lowercase, digit, and symbol.</small>
+          {{ form.password1 }}
+          {% for error in form.password1.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="password2">Confirm Password</label>
+          <small class="text-muted d-block mb-1">Retype the password for confirmation.</small>
+          {{ form.password2 }}
+          {% for error in form.password2.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        {% if form.errors %}
+          <div class="alert alert-danger">
+            <strong>Please fix the errors above.</strong>
+          </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus me-1"></i> Register</button>
+          <a href="{% url 'login' %}" class="btn btn-link text-info">Go to Login <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </form>
+
+      <footer class="text-center mt-5 small text-muted">
+        &copy; 2024 XEAM. All rights reserved.
+      </footer>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
