@@ -135,27 +135,27 @@
 
   </div>
 
-  <!-- HERO SECTION (Inside the Animated Container) -->
-  <section class="hero-section">
-    <div class="hero-text">
-      <h1>Discover Our In-depth Tokenomics</h1>
-      <p>Philanthrochain: Empowering Generosity, Block by Block.</p>
-      <a class="btn" href="{% url 'presale' %}"><i class="fas fa-fire me-1 text-warning"></i>Join Presale</a
-      <button class="btn"></button>
-    </div>
-    <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
-      <div class="logo">
-        <div>
-          <img
-            src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
-            alt="Tangle Logo" class="logo-image">
-        </div>
+<!-- HERO SECTION (Inside the Animated Container) -->
+<section class="hero-section">
+  <div class="hero-text">
+    <h1>Earn, Empower, Elevate.</h1>
+    <p>XEAM: A DeFi token that rewards you for holding, staking, and sparking real-world impact — automatically.</p>
+    <a class="btn" href="{% url 'presale' %}">
+      <i class="fas fa-fire me-1 text-warning"></i>Join Presale
+    </a>
+  </div>
+  
+  <div class="col-lg-12 col-lg-offset-4" id="loginBlock">
+    <div class="logo">
+      <div>
+        <img
+          src="https://res.cloudinary.com/dhx65uemx/image/upload/e_background_removal/f_png/v1742505999/image_hr3eq1.webp"
+          alt="Tangle Logo" class="logo-image">
       </div>
-      <div class="pageTitle"></div> <!-- Keeps background & animations -->
     </div>
-  </section>
-</div>
-
+    <div class="pageTitle"></div> <!-- Keeps background & animations -->
+  </div>
+</section>
 
 <section id="about" class="features-container py-4">
   <div class="container text-center">
@@ -706,35 +706,46 @@
 
 
 
-<!-- FOOTER -->
-<footer class="footer mt-5">
-  <div>
-    <h5>Token Radar</h5>
-    <p>Revolutionizing crypto analytics and blockchain transparency.</p>
+<footer class="footer">
+  <div class="footer-content">
+    <div>
+      <h5>XEAM Token</h5>
+      <p>Empowering blockchain philanthropy through crypto and DeFi innovation.</p>
+    </div>
+
+    <div>
+      <h5>Quick Links</h5>
+      <a href="#">How It Works</a><br>
+      <a href="#">Staking</a><br>
+      <a href="#">Roadmap</a><br>
+      <a href="#">Donate</a>
+    </div>
+
+    <div>
+      <h5>Newsletter</h5>
+      <input type="email" placeholder="Enter your email">
+      <br>
+      <button class="subscribe-btn">Subscribe</button>
+    </div>
+
+    <div>
+      <h5>Follow Us</h5>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-telegram"></i></a>
+        <a href="#"><i class="fab fa-discord"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
   </div>
 
-  <div class="footer-links">
-    <h5>Links</h5>
-    <a href="#">How it works</a><br>
-    <a href="#">Cryptos</a><br>
-    <a href="#">Features</a><br>
-  </div>
-
-  <div>
-    <h5>Newsletter</h5>
-    <input type="email" placeholder="Enter your email">
-    <button class="subscribe-btn">Subscribe</button>
-  </div>
-
-  <div class="footer-social mt-3">
-    <h5>Follow Us</h5>
-    <a href="https://twitter.com/yourhandle" target="_blank"><i class="fab fa-x-twitter"></i></a>
-    <a href="https://t.me/yourgroup" target="_blank"><i class="fab fa-telegram"></i></a>
-    <a href="https://discord.gg/yourserver" target="_blank"><i class="fab fa-discord"></i></a>
-    <a href="https://github.com/yourrepo" target="_blank"><i class="fab fa-github"></i></a>
-    <a href="https://linkedin.com/in/yourprofile" target="_blank"><i class="fab fa-linkedin"></i></a>
+  <div class="footer-bottom">
+    <p>&copy; {{ now.year }} XEAM Token. All rights reserved.</p>
   </div>
 </footer>
+
+
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const replacements = {
@@ -794,6 +805,8 @@
       return new bootstrap.Tooltip(tooltipTriggerEl);
     });
   });
+
+  
 
   
 </script>
