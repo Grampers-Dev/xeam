@@ -9,6 +9,7 @@ body {
     color: white;
     margin: 0;
     padding: 0;
+    letter-spacing: 0.6px;
 }
 
 *, *::before, *::after {
@@ -870,6 +871,11 @@ footer.footer {
   font-size: 0.9rem;
   color: #bbb;
 }
+
+.xeam-highlight {
+  color: #ff5733; /* XEAM brand red */
+}
+
 
 
 
