@@ -292,10 +292,10 @@ a:hover, .nav-link:hover, .nav-link:active {
 }
 
 img.logo-image {
-    width: 250px;
+    width: 350px;
     height: auto;
-    max-height: 260px;
-    margin-left: 200px;
+    max-height: 360px;
+    margin-left: 100px;
     opacity: 0.8;
 }
 
