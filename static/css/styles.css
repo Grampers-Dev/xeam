@@ -406,7 +406,7 @@ a:hover, .nav-link:hover {
     flex-direction: column;
     padding: 3rem 1rem;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 1S50px;
   }
 
   .hero-text {
@@ -478,10 +478,38 @@ a:hover, .nav-link:hover {
   }
 }
 
-
-* {
-  outline: 1px dashed red;
+/* Default desktop style */
+#loginBlock .logo-image {
+  max-width: 350px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
+
+/* Make it responsive on smaller screens */
+@media (max-width: 768px) {
+  #loginBlock {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  #loginBlock .logo-image {
+    max-width: 80%;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  #loginBlock .logo-image {
+    max-width: 70%;
+  }
+}
+
+#loginBlock .logo-image {
+  transition: max-width 0.3s ease;
+}
+
+
 
 
 
