@@ -468,6 +468,20 @@ a:hover, .nav-link:hover {
   }
 }
 
+@media (max-width: 768px) {
+  img.logo-image {
+    width: 80%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+}
+
+
+* {
+  outline: 1px dashed red;
+}
 
 
 
