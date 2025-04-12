@@ -12,7 +12,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token }}">
-    <meta name="description" content="XEAM Forum">
+    <meta name="description" content="XEAM is a decentralized application (DApp) that combines blockchain technology with charitable giving.">
+    <meta name="author" content="XEAM Team">
     <meta name="keywords" content="forum, django, blockchain, crypto, defi, xeam">
     <meta name="robots" content="index, follow">
     <link rel="shortcut icon" href="{% static 'images/favicon_io/favicon.ico' %}" type="image/x-icon">
@@ -32,7 +33,7 @@
             background-color: #0d0b1f;
             color: #f0f0f0;
             overflow-x: hidden;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .vanta-bg {
@@ -58,7 +59,6 @@
 <body>
     <!-- VANTA Background container -->
     <div id="vanta-bg" class="vanta-bg"></div>
-
 
     {% if messages %}
     <div class="container mt-3">
@@ -95,6 +95,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.9.1/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.9.1/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 
     <!-- AOS + Vanta Init -->
     <script>
@@ -113,8 +114,8 @@
                 scaleMobile: 1.0,
                 color: 0x49c5b6,
                 backgroundColor: 0x0d0b1f,
-                points: 12.00,
-                maxDistance: 20.00,
+                points: 8.00,
+                maxDistance: 15.00,
                 spacing: 20.00
             });
 
