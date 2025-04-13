@@ -1,15 +1,18 @@
-# Force Django Python files to count toward language stats
+# Force .py files to count
 *.py linguist-detectable=true
 
-# Ignore vendor, node_modules, minified JS, and migrations
-static/vendor/** linguist-vendored
-node_modules/** linguist-vendored
-**/migrations/** linguist-vendored
-*.min.js linguist-vendored
+# Ignore front-end vendor files
+/static/** linguist-vendored
+/staticfiles/** linguist-vendored
+/node_modules/** linguist-vendored
+**/*.min.js linguist-vendored
 
-# Make sure templates (HTML) are counted
+# Ensure HTML and Django templates count
 *.html linguist-detectable=true
-
-# If you want to treat .jinja or .djhtml as HTML
-*.djhtml linguist-language=HTML
 *.jinja linguist-language=HTML
+*.djhtml linguist-language=HTML
+
+# Ignore migrations and auto-generated files
+**/migrations/** linguist-vendored
+**/__pycache__/** linguist-vendored
+
