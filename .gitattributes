@@ -1,18 +1,19 @@
-# Force .py files to count
+# ✅ Force .py files to count
 *.py linguist-detectable=true
 
-# Ignore front-end vendor files
+# ✅ Allow HTML to show but not weigh heavily
+*.html linguist-documentation
+
+# ✅ Count these as real code, but not primary
+*.css linguist-detectable=true
+*.js linguist-detectable=true
+
+# 🚫 Ignore vendor/static-only stuff
 /static/** linguist-vendored
 /staticfiles/** linguist-vendored
 /node_modules/** linguist-vendored
 **/*.min.js linguist-vendored
-
-# Ensure HTML and Django templates count
-*.html linguist-detectable=true
-*.jinja linguist-language=HTML
-*.djhtml linguist-language=HTML
-
-# Ignore migrations and auto-generated files
 **/migrations/** linguist-vendored
 **/__pycache__/** linguist-vendored
+
 
