@@ -13,6 +13,7 @@ from .forms import ExtendedUserCreationForm, ProfileForm
 from user_profile.models import Profile, Post, StakedToken
 import json
 from datetime import datetime
+from django.utils.timezone import now
 
 
 def index(request):
@@ -163,3 +164,11 @@ def whitepaper(request):
 
 def presale_view(request):
     return render(request, 'users/presale.html')
+
+
+
+def some_view(request):
+    return render(request, 'users/index.html', {
+        'now': now(),
+    })
+
