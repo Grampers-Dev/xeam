@@ -489,7 +489,7 @@ a:hover, .nav-link:hover {
 }
 
 img.logo-image {
-  max-width: 100%;
+  max-width: 30%;
   height: auto;
   display: block;
   margin-left: auto;
@@ -497,9 +497,15 @@ img.logo-image {
 }
 
 /* Optional: Limit size on larger screens */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   img.logo-image {
-    max-width: 25%;
+    max-width: 15%;
+  }
+}
+
+@media (max-width: 320px) {
+  img.logo-image {
+    max-width: 90%;
   }
 }
 
