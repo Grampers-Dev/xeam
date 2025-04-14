@@ -499,11 +499,11 @@ img.logo-image {
 /* Optional: Limit size on larger screens */
 @media (max-width: 768px) {
   img.logo-image {
-    max-width: 15%;
+    max-width: 85%;
   }
 }
 
-@media (max-width: 320px) {
+@media (min-width: 320px and max-width: 480px) {
   img.logo-image {
     max-width: 90%;
   }
