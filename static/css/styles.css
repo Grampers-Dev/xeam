@@ -476,12 +476,20 @@ a:hover, .nav-link:hover {
 }
 
 img.logo-image {
-  max-width: 25%;
+  max-width: 100%;
   height: auto;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
+
+/* Optional: Limit size on larger screens */
+@media (min-width: 768px) {
+  img.logo-image {
+    max-width: 25%;
+  }
+}
+
 
 .inspire-bg {
   background: linear-gradient(to bottom, #0e1b2a, #49c5b6, #b06cc0, #f9943b);
