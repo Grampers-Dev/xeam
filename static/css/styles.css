@@ -96,6 +96,19 @@ a:hover, .nav-link:hover {
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* White border around the button */
+.navbar-toggler {
+  border: 1px solid #fff; /* White border */
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* White lines inside the hamburger icon */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+
 #connect-wallet {
   background-color: var(--xeam-teal);
   color: white;
