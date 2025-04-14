@@ -476,7 +476,7 @@ a:hover, .nav-link:hover {
 }
 
 img.logo-image {
-  max-width: 100%;
+  max-width: 25%;
   height: auto;
   display: block;
   margin-left: auto;
