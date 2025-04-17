@@ -258,6 +258,49 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  async function unstakeTokens() {
+    try {
+      const amount = parseFloat(document.getElementById("stakeAmount").value);
+      if (!amount || amount <= 0) {
+        stakingStatus.textContent = "❌ Enter a valid unstaking amount.";
+        return;
+      }
+  
+      const decimals = await tokenContract.methods.decimals().call();
+      const unstakeAmount = web3.utils.toBN((amount * 10 ** decimals).toString());
+  
+      const currentStaked = await stakingContract.methods
+        .stakedBalanceOf(userAccount)
+        .call();
+  
+      if (unstakeAmount.gt(web3.utils.toBN(currentStaked))) {
+        stakingStatus.textContent = `❌ You only have ${(
+          currentStaked / 10 ** decimals
+        ).toFixed(4)} XEAM staked.`;
+        return;
+      }
+  
+      await stakingContract.methods
+        .unstake(unstakeAmount)
+        .send({ from: userAccount })
+        .on("transactionHash", (hash) => console.log("Unstaking TX:", hash))
+        .on("receipt", (receipt) => {
+          console.log("✅ Unstaking complete:", receipt);
+          stakingStatus.textContent = `✅ Unstaked ${amount} XEAM successfully.`;
+          updateBalance();
+          updateClaimable();
+        })
+        .on("error", (err) => {
+          console.error("❌ Unstaking error:", err);
+          stakingStatus.textContent = `❌ Unstaking failed: ${err.message}`;
+        });
+    } catch (err) {
+      console.error("Unexpected unstaking error:", err);
+      stakingStatus.textContent = `❌ Unexpected error: ${err.message}`;
+    }
+  }
+  
+
   async function updateClaimable() {
     try {
       const decimals = await retryRequest(() =>
