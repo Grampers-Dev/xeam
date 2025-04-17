@@ -104,6 +104,21 @@
           </div>
 
           <h4 class="mb-3">🔸 <span id="claimableAmount">--</span> XEAM Available</h4>
+          <div>Next reward in: <span id="nextRewardIn">--:--:--</span></div>
+          <div class="progress mb-3">
+            <div id="rewardProgress" class="progress-bar" role="progressbar"></div>
+          </div>
+          
+          <div class="mb-2 text-muted">
+            <small>Rewards are calculated based on your staking activity.</small>
+          </div>
+          <div class="mb-2 text-muted">
+            <small>Rewards are distributed every 24 hours.</small>
+          </div>
+          <small>You earn <strong>𝑅</strong> XEAM per day.</small>
+          <div class="mb-2 text-muted">
+            <small>Claimable amount is calculated based on your staking activity.</small>
+          </div>
 
           <button class="btn btn-success" id="claimBtn">
             <i class="fas fa-hand-holding-usd"></i> Claim Tokens
@@ -135,6 +150,7 @@
           <div class="mb-3">
             Available Balance: <strong id="availableBalance">--</strong> XEAM
           </div>
+          
 
           <div class="mb-2">
             You’ve staked: <strong><span id="stakedAmount">--</span> XEAM</strong>
