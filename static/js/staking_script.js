@@ -1,4 +1,8 @@
 // XEAM Staking Rewards Distribution Script (with live balance read)
+let userAccount;
+let tokenContract;
+let stakingContract;
+let web3;
 
 const Web3 = require('web3');
 const stakingAbi = require('./abis/XEAMStaking_ABI.json');
