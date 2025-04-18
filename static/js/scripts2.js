@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const stakeAgeLbl = document.getElementById("stakeAge");
   const rewardProgressBar = document.getElementById("rewardProgress");
 
-  // constants
+  // ─────── CONSTANTS ─────────────────────────────────────────────────────────────
   const INTERVAL = 24 * 3600; // 24 h in seconds
   const BASE_DAILY_REWARD = 5; // XEAM/day at ×1.0 (Bronze)
 
@@ -31,21 +31,257 @@ document.addEventListener("DOMContentLoaded", async function () {
   const web3 = new Web3(window.ethereum);
   window.web3 = web3;
 
-  // ─── TOKEN ABI (full) ─────────────────────────────────────────────────────────
+  // ─ Token ABI (full ERC‑20 + extras) ───────────────────────────────────────────
   const tokenABI = [
-    // ... full ERC‑20 ABI as you already have above ...
-    // (including constructor, errors, events, view & nonpayable methods)
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "_encouragementFund",
+          type: "address",
+        },
+        { internalType: "address", name: "_emergencyFund", type: "address" },
+        { internalType: "address", name: "_marketingWallet", type: "address" },
+        { internalType: "address", name: "_stakingWallet", type: "address" },
+        {
+          internalType: "address",
+          name: "_initialUniswapPair",
+          type: "address",
+        },
+      ],
+      stateMutability: "nonpayable",
+      type: "constructor",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "spender", type: "address" },
+        { internalType: "uint256", name: "allowance", type: "uint256" },
+        { internalType: "uint256", name: "needed", type: "uint256" },
+      ],
+      name: "ERC20InsufficientAllowance",
+      type: "error",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "sender", type: "address" },
+        { internalType: "uint256", name: "balance", type: "uint256" },
+        { internalType: "uint256", name: "needed", type: "uint256" },
+      ],
+      name: "ERC20InsufficientBalance",
+      type: "error",
+    },
+    {
+      inputs: [{ internalType: "address", name: "approver", type: "address" }],
+      name: "ERC20InvalidApprover",
+      type: "error",
+    },
+    {
+      inputs: [{ internalType: "address", name: "receiver", type: "address" }],
+      name: "ERC20InvalidReceiver",
+      type: "error",
+    },
+    {
+      inputs: [{ internalType: "address", name: "sender", type: "address" }],
+      name: "ERC20InvalidSender",
+      type: "error",
+    },
+    {
+      inputs: [{ internalType: "address", name: "spender", type: "address" }],
+      name: "ERC20InvalidSpender",
+      type: "error",
+    },
+    {
+      inputs: [{ internalType: "address", name: "owner", type: "address" }],
+      name: "OwnableInvalidOwner",
+      type: "error",
+    },
     {
       inputs: [{ internalType: "address", name: "account", type: "address" }],
-      name: "balanceOf",
+      name: "OwnableUnauthorizedAccount",
+      type: "error",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "owner",
+          type: "address",
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "value",
+          type: "uint256",
+        },
+      ],
+      name: "Approval",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "LPFundsWithdrawn",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "previousOwner",
+          type: "address",
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "newOwner",
+          type: "address",
+        },
+      ],
+      name: "OwnershipTransferred",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "address",
+          name: "account",
+          type: "address",
+        },
+      ],
+      name: "Paused",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+        {
+          indexed: false,
+          internalType: "string",
+          name: "category",
+          type: "string",
+        },
+      ],
+      name: "TaxDistributed",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "newBuyTax",
+          type: "uint256",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "newSellTax",
+          type: "uint256",
+        },
+      ],
+      name: "TaxesUpdated",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "from",
+          type: "address",
+        },
+        { indexed: true, internalType: "address", name: "to", type: "address" },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "value",
+          type: "uint256",
+        },
+      ],
+      name: "Transfer",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "address",
+          name: "newPair",
+          type: "address",
+        },
+      ],
+      name: "UniswapPairUpdated",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "address",
+          name: "account",
+          type: "address",
+        },
+      ],
+      name: "Unpaused",
+      type: "event",
+    },
+    {
+      inputs: [],
+      name: "INITIAL_SUPPLY",
       outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
       stateMutability: "view",
       type: "function",
     },
     {
       inputs: [],
-      name: "decimals",
-      outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+      name: "MAX_TX",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "MAX_WALLET",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "owner", type: "address" },
+        { internalType: "address", name: "spender", type: "address" },
+      ],
+      name: "allowance",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
       stateMutability: "view",
       type: "function",
     },
@@ -59,11 +295,311 @@ document.addEventListener("DOMContentLoaded", async function () {
       stateMutability: "nonpayable",
       type: "function",
     },
-    // (you can leave the rest of the ABI in place)
+    {
+      inputs: [{ internalType: "address", name: "account", type: "address" }],
+      name: "balanceOf",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "buyTax",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "decimals",
+      outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "emergencyFund",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "encouragementFund",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "", type: "address" }],
+      name: "isExcludedFromFees",
+      outputs: [{ internalType: "bool", name: "", type: "bool" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "marketingWallet",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "name",
+      outputs: [{ internalType: "string", name: "", type: "string" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "owner",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "pause",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "paused",
+      outputs: [{ internalType: "bool", name: "", type: "bool" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "renounceOwnership",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "sellTax",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "stakingWallet",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "symbol",
+      outputs: [{ internalType: "string", name: "", type: "string" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "totalSupply",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "to", type: "address" },
+        { internalType: "uint256", name: "value", type: "uint256" },
+      ],
+      name: "transfer",
+      outputs: [{ internalType: "bool", name: "", type: "bool" }],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "sender", type: "address" },
+        { internalType: "address", name: "recipient", type: "address" },
+        { internalType: "uint256", name: "amount", type: "uint256" },
+      ],
+      name: "transferFrom",
+      outputs: [{ internalType: "bool", name: "", type: "bool" }],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+      name: "transferOwnership",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "uniswapPair",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "unpause",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "account", type: "address" },
+        { internalType: "bool", name: "excluded", type: "bool" },
+      ],
+      name: "updateExcludedAccountStatus",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "uint256", name: "_buyTax", type: "uint256" },
+        { internalType: "uint256", name: "_sellTax", type: "uint256" },
+      ],
+      name: "updateTaxes",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "newPair", type: "address" }],
+      name: "updateUniswapPair",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "withdrawLPFunds",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
   ];
 
-  // ─── STAKING ABI (full) ───────────────────────────────────────────────────────
+  // ─ Staking ABI (v3: with initialRate, rewardRate, totalStaked, etc.) ───────────
   const stakingABI = [
+    {
+      inputs: [
+        { internalType: "address", name: "_xeamToken", type: "address" },
+        { internalType: "uint256", name: "_initialRate", type: "uint256" },
+      ],
+      stateMutability: "nonpayable",
+      type: "constructor",
+    },
+    {
+      inputs: [{ internalType: "address", name: "owner", type: "address" }],
+      name: "OwnableInvalidOwner",
+      type: "error",
+    },
+    {
+      inputs: [{ internalType: "address", name: "account", type: "address" }],
+      name: "OwnableUnauthorizedAccount",
+      type: "error",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "previousOwner",
+          type: "address",
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "newOwner",
+          type: "address",
+        },
+      ],
+      name: "OwnershipTransferred",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "user",
+          type: "address",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "reward",
+          type: "uint256",
+        },
+      ],
+      name: "RewardPaid",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "oldRate",
+          type: "uint256",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "newRate",
+          type: "uint256",
+        },
+      ],
+      name: "RewardRateUpdated",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "user",
+          type: "address",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "Staked",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "user",
+          type: "address",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "Unstaked",
+      type: "event",
+    },
     {
       inputs: [{ internalType: "address", name: "user", type: "address" }],
       name: "calculateReward",
@@ -79,15 +615,68 @@ document.addEventListener("DOMContentLoaded", async function () {
       type: "function",
     },
     {
-      inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
-      name: "stake",
+      inputs: [],
+      name: "lastUpdateTime",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "owner",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "renounceOwnership",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "token", type: "address" },
+        { internalType: "address", name: "to", type: "address" },
+        { internalType: "uint256", name: "amount", type: "uint256" },
+      ],
+      name: "rescueTokens",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "rewardPerTokenStored",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "rewardRate",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "", type: "address" }],
+      name: "rewards",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "uint256", name: "newRate", type: "uint256" }],
+      name: "setRewardRate",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
     },
     {
       inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
-      name: "unstake",
+      name: "stake",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
@@ -109,11 +698,46 @@ document.addEventListener("DOMContentLoaded", async function () {
       stateMutability: "view",
       type: "function",
     },
+    {
+      inputs: [],
+      name: "totalStaked",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+      name: "transferOwnership",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+      name: "unstake",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "", type: "address" }],
+      name: "userRewardPerTokenPaid",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "xeamToken",
+      outputs: [{ internalType: "contract IERC20", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
   ];
 
   // ─── ADDRESSES ───────────────────────────────────────────────────────────────
   const tokenAddress = "0x81dcEF0C7fEb6BC0F50f6d4F8Cc1635393A6EBEB";
-  const stakingAddress = "0xEA15E5C2388ba6bFEC4BF1979ca68140a6Be5C2F";
+  const stakingAddress = "0x985D4E991f1Bfb2474315ea9d7Ec92b0b74F3b7A";
 
   const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
   const stakingContract = new web3.eth.Contract(stakingABI, stakingAddress);
@@ -121,11 +745,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   // ─────── STATE ────────────────────────────────────────────────────────────────
   let userAccount = null;
   let stakeTimestamp = 0;
-  let refreshInterval = null;
+  let refreshInterval;
 
   // ─────── HELPERS ─────────────────────────────────────────────────────────────
-
-  // fraction toward next whole XEAM
   function getMultiplier(stakedAmount) {
     if (stakedAmount >= 1000) return 2.0; // Diamond
     if (stakedAmount >= 500) return 1.5; // Gold
@@ -134,30 +756,28 @@ document.addEventListener("DOMContentLoaded", async function () {
     return 0.0; // Base
   }
 
-  // update the “progress bar” toward the next whole XEAM
   async function updateRewardProgress(rawReward, decimals) {
     const unit = 10 ** decimals;
     const fraction = (Number(rawReward) % unit) / unit;
     rewardProgressBar.style.width = `${(fraction * 100).toFixed(2)}%`;
   }
 
-  // show claimable either estimated (if still locked) or on‑chain (if matured)
   async function updateClaimable() {
     if (!userAccount) return;
 
-    // how long since stake
     const nowSec = Math.floor(Date.now() / 1000);
     const elapsed = nowSec - stakeTimestamp;
 
-    // read staked balance & compute multiplier
+    // get staked amount & multiplier
     let rawStaked = "0";
     try {
       rawStaked = await stakingContract.methods
         .stakedBalanceOf(userAccount)
         .call();
     } catch {
-      console.warn("stakedBalanceOf() failed → 0");
+      console.warn("stakedBalanceOf failed");
     }
+
     const dec = Number(
       await tokenContract.methods
         .decimals()
@@ -167,7 +787,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const staked = Number(rawStaked) / 10 ** dec;
     const mult = getMultiplier(staked);
 
-    // try on‑chain reward (only works once 24 h passed)
+    // on‑chain reward if matured
     let onchain = 0;
     try {
       const raw = await stakingContract.methods
@@ -175,10 +795,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         .call();
       onchain = Number(raw) / 10 ** dec;
     } catch {
-      // still locked → fallback
+      /* locked */
     }
 
-    // choose display
+    // pick display value
     let claimable;
     if (elapsed >= INTERVAL) {
       claimable = onchain;
@@ -187,14 +807,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       claimable = frac * BASE_DAILY_REWARD * mult;
     }
 
+    // render
     claimableAmountLbl.textContent = claimable.toFixed(4);
     rewardProgressBar.style.width = `${((claimable % 1) * 100).toFixed(2)}%`;
 
-    // disable claim button until matured
+    // disable until actual claim
     claimBtn.disabled = elapsed < INTERVAL;
   }
 
-  // update staked info + countdown + record timestamp
   async function updateStakedInfo() {
     let rawStaked = "0",
       ts = 0;
@@ -206,7 +826,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       ts = s.timestamp || s[1] || 0;
       stakeTimestamp = ts;
     } catch {
-      console.warn("stakes() failed → 0");
+      console.warn("stakes() failed");
     }
 
     const dec = Number(
@@ -218,14 +838,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const staked = Number(rawStaked) / 10 ** dec;
     stakedAmountLbl.textContent = staked.toFixed(4);
 
-    // stake age
-    const elapsed = ts > 0 ? Math.floor(Date.now() / 1000) - Number(ts) : 0;
+    // age and countdown
+    const elapsed = ts > 0 ? Math.floor(Date.now() / 1000) - ts : 0;
     const days = Math.floor(elapsed / 86400);
     const hours = Math.floor((elapsed % 86400) / 3600);
     stakeAgeLbl.textContent =
       ts > 0 ? `${days ? days + "d " : ""}${hours}h` : "0h";
 
-    // next reward countdown
     if (ts > 0) {
       const into = elapsed % INTERVAL;
       const remain = INTERVAL - into;
@@ -238,7 +857,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  // fetch & display wallet balance
   async function updateBalance() {
     try {
       const [dec, raw] = await Promise.all([
@@ -252,7 +870,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // ─────── ACTIONS ─────────────────────────────────────────────────────────────
-
   async function connectWallet() {
     try {
       const accounts = await window.ethereum.request({
@@ -264,7 +881,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       walletAddressLabel.innerHTML = `Wallet: <code>${userAccount}</code>`;
       document.getElementById("stakingWallet").textContent = userAccount;
 
-      // initial render
       await updateBalance();
       await updateStakedInfo();
       await updateClaimable();
@@ -294,7 +910,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       await tokenContract.methods
         .approve(stakingAddress, value)
         .send({ from: userAccount });
-
       await stakingContract.methods.stake(value).send({ from: userAccount });
 
       stakingStatus.textContent = `✅ Staked ${amt} XEAM`;
@@ -318,11 +933,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         .stakedBalanceOf(userAccount)
         .call();
 
-      if (value.gt(web3.utils.toBN(rawSt))) {
+      if (value.gt(web3.utils.toBN(rawSt)))
         throw new Error(
-          `You only have ${(Number(rawSt) / 10 ** dec).toFixed(4)} XEAM staked`
+          `Only ${(Number(rawSt) / 10 ** dec).toFixed(4)} XEAM staked`
         );
-      }
 
       await stakingContract.methods.unstake(value).send({ from: userAccount });
 
@@ -357,7 +971,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       stakeTimestamp = Math.floor(Date.now() / 1000);
     } catch (e) {
       console.error("Claim failed:", e);
-      claimStatus.textContent = `❌ Claim failed: ${e.message}`;
+      claimStatus.textContent = `❌ ${e.message}`;
     }
   }
 
