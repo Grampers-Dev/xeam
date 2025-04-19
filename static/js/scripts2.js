@@ -1,29 +1,42 @@
 document.addEventListener("DOMContentLoaded", async function () {
   // ─────── ELEMENTS ────────────────────────────────────────────────────────────
-  const enableEthereumButton = document.getElementById("connect-wallet");
+  const connectBtn = document.getElementById("connect-wallet");
   const stakeBtn = document.getElementById("stakeBtn");
   const unstakeBtn = document.getElementById("unstakeBtn");
   const claimBtn = document.getElementById("claimBtn");
-  const stakingStatus = document.getElementById("stakingStatus");
-  const claimStatus = document.getElementById("claimStatus");
-  const successMessage = document.getElementById("successMessage");
-  const metamaskInstall = document.getElementById("metamaskInstallMessage");
-  const walletAddressLabel = document.getElementById("walletAddress");
-  const availableBalanceLbl = document.getElementById("availableBalance");
-  const claimableAmountLbl = document.getElementById("claimableAmount");
-  const nextRewardInLbl = document.getElementById("nextRewardIn");
-  const stakedAmountLbl = document.getElementById("stakedAmount");
+  const walletAddrLbl = document.getElementById("walletAddress");
+  const stakingWalletLbl = document.getElementById("stakingWallet");
+  const metaMaskMsg = document.getElementById("metamaskInstallMessage");
+  const successMsg = document.getElementById("successMessage");
+
+  const availableLbl = document.getElementById("availableBalance");
+  const claimableLbl = document.getElementById("claimableAmount");
+  const nextRewardLbl = document.getElementById("nextRewardIn");
+  const rewardBar = document.getElementById("rewardProgress");
+  const dailyRateLbl = document.getElementById("dailyRate");
+  const claimGasLbl = document.getElementById("claimGas");
+  const historyTbody = document.getElementById("claimHistory");
+
+  const stakedLbl = document.getElementById("stakedAmount");
   const stakeAgeLbl = document.getElementById("stakeAge");
-  const rewardProgressBar = document.getElementById("rewardProgress");
+  const aprLbl = document.getElementById("apr");
+  const totalStakedLbl = document.getElementById("totalStaked");
+  const userShareLbl = document.getElementById("userShare");
+  const tierBar = document.getElementById("tierProgress");
+  const nextTierLbl = document.getElementById("nextTierThreshold");
+  const estimatedLbl = document.getElementById("estimatedReward");
+  const multiplierLbl = document.getElementById("multiplierLabel");
+  const feedbackDiv = document.getElementById("stakingFeedback");
+  const stakeInput = document.getElementById("stakeAmount");
+  const unstakeFeeLbl = document.getElementById("unstakeFee");
 
   // ─────── CONSTANTS ─────────────────────────────────────────────────────────────
-  const INTERVAL = 24 * 3600; // 24 h in seconds
-  const BASE_DAILY_REWARD = 5; // XEAM/day at ×1.0 (Bronze)
+  const INTERVAL = 24 * 3600; // seconds
+  const BASE_DAILY_REWARD = 5; // 5 XEAM @ ×1.0 Bronze
 
   if (typeof window.ethereum === "undefined") {
-    metamaskInstall.innerHTML =
+    metaMaskMsg.innerHTML =
       'Please install <a href="https://metamask.io/download/" target="_blank">MetaMask</a>';
-    metamaskInstall.classList.add("text-danger");
     return;
   }
 
@@ -31,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const web3 = new Web3(window.ethereum);
   window.web3 = web3;
 
-  // ─ Token ABI (full ERC‑20 + extras) ───────────────────────────────────────────
+  // ─── Token ABI (full ERC‑20 + extras) ───────────────────────────────────────────
   const tokenABI = [
     {
       inputs: [
@@ -484,8 +497,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       type: "function",
     },
   ];
-
-  // ─ Staking ABI (v3: with initialRate, rewardRate, totalStaked, etc.) ───────────
+  // ─── Staking ABI ─────────────────────────────────────────────────────────────
   const stakingABI = [
     {
       inputs: [
@@ -735,7 +747,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     },
   ];
 
-  // ─── ADDRESSES ───────────────────────────────────────────────────────────────
   const tokenAddress = "0x81dcEF0C7fEb6BC0F50f6d4F8Cc1635393A6EBEB";
   const stakingAddress = "0x985D4E991f1Bfb2474315ea9d7Ec92b0b74F3b7A";
 
@@ -744,240 +755,259 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // ─────── STATE ────────────────────────────────────────────────────────────────
   let userAccount = null;
-  let stakeTimestamp = 0;
-  let refreshInterval;
+  let stakeTime = 0;
+  let refreshHandle, countdownHandle;
 
   // ─────── HELPERS ─────────────────────────────────────────────────────────────
-  function getMultiplier(stakedAmount) {
-    if (stakedAmount >= 1000) return 2.0; // Diamond
-    if (stakedAmount >= 500) return 1.5; // Gold
-    if (stakedAmount >= 250) return 1.2; // Silver
-    if (stakedAmount >= 50) return 1.0; // Bronze
-    return 0.0; // Base
+  function getTierAndMultiplier(amount) {
+    if (amount >= 1000) return ["Diamond", 2.0];
+    if (amount >= 500) return ["Gold", 1.5];
+    if (amount >= 250) return ["Silver", 1.2];
+    if (amount >= 50) return ["Bronze", 1.0];
+    return ["Base", 0.0];
   }
 
-  async function updateRewardProgress(rawReward, decimals) {
-    const unit = 10 ** decimals;
-    const fraction = (Number(rawReward) % unit) / unit;
-    rewardProgressBar.style.width = `${(fraction * 100).toFixed(2)}%`;
+  function startCountdown(fromTs) {
+    clearInterval(countdownHandle);
+    const end = Number(fromTs) + INTERVAL;
+    countdownHandle = setInterval(() => {
+      const now = Math.floor(Date.now() / 1000),
+        left = end - now;
+      if (left <= 0) return clearInterval(countdownHandle);
+      const h = String(Math.floor(left / 3600)).padStart(2, "0"),
+        m = String(Math.floor((left % 3600) / 60)).padStart(2, "0"),
+        s = String(left % 60).padStart(2, "0");
+      nextRewardLbl.textContent = `${h}:${m}:${s}`;
+      rewardBar.style.width = `${(((INTERVAL - left) / INTERVAL) * 100).toFixed(
+        2
+      )}%`;
+    }, 1000);
   }
 
-  async function updateClaimable() {
-    if (!userAccount) return;
-
-    const nowSec = Math.floor(Date.now() / 1000);
-    const elapsed = nowSec - stakeTimestamp;
-
-    // get staked amount & multiplier
-    let rawStaked = "0";
+  async function updateGasEstimate() {
     try {
-      rawStaked = await stakingContract.methods
-        .stakedBalanceOf(userAccount)
-        .call();
+      const gasPrice = await web3.eth.getGasPrice();
+      claimGasLbl.textContent = (gasPrice / 1e9).toFixed(1) + " Gwei";
     } catch {
-      console.warn("stakedBalanceOf failed");
-    }
-
-    const dec = Number(
-      await tokenContract.methods
-        .decimals()
-        .call()
-        .catch(() => 18)
-    );
-    const staked = Number(rawStaked) / 10 ** dec;
-    const mult = getMultiplier(staked);
-
-    // on‑chain reward if matured
-    let onchain = 0;
-    try {
-      const raw = await stakingContract.methods
-        .calculateReward(userAccount)
-        .call();
-      onchain = Number(raw) / 10 ** dec;
-    } catch {
-      /* locked */
-    }
-
-    // pick display value
-    let claimable;
-    if (elapsed >= INTERVAL) {
-      claimable = onchain;
-    } else {
-      const frac = Math.min(elapsed / INTERVAL, 1);
-      claimable = frac * BASE_DAILY_REWARD * mult;
-    }
-
-    // render
-    claimableAmountLbl.textContent = claimable.toFixed(4);
-    rewardProgressBar.style.width = `${((claimable % 1) * 100).toFixed(2)}%`;
-
-    // disable until actual claim
-    claimBtn.disabled = elapsed < INTERVAL;
-  }
-
-  async function updateStakedInfo() {
-    let rawStaked = "0",
-      ts = 0;
-    try {
-      rawStaked = await stakingContract.methods
-        .stakedBalanceOf(userAccount)
-        .call();
-      const s = await stakingContract.methods.stakes(userAccount).call();
-      ts = s.timestamp || s[1] || 0;
-      stakeTimestamp = ts;
-    } catch {
-      console.warn("stakes() failed");
-    }
-
-    const dec = Number(
-      await tokenContract.methods
-        .decimals()
-        .call()
-        .catch(() => 18)
-    );
-    const staked = Number(rawStaked) / 10 ** dec;
-    stakedAmountLbl.textContent = staked.toFixed(4);
-
-    // age and countdown
-    const elapsed = ts > 0 ? Math.floor(Date.now() / 1000) - ts : 0;
-    const days = Math.floor(elapsed / 86400);
-    const hours = Math.floor((elapsed % 86400) / 3600);
-    stakeAgeLbl.textContent =
-      ts > 0 ? `${days ? days + "d " : ""}${hours}h` : "0h";
-
-    if (ts > 0) {
-      const into = elapsed % INTERVAL;
-      const remain = INTERVAL - into;
-      const hh = String(Math.floor(remain / 3600)).padStart(2, "0");
-      const mm = String(Math.floor((remain % 3600) / 60)).padStart(2, "0");
-      const ss = String(remain % 60).padStart(2, "0");
-      nextRewardInLbl.textContent = `${hh}:${mm}:${ss}`;
-    } else {
-      nextRewardInLbl.textContent = "--:--:--";
+      claimGasLbl.textContent = "--";
     }
   }
 
   async function updateBalance() {
     try {
-      const [dec, raw] = await Promise.all([
-        tokenContract.methods.decimals().call(),
-        tokenContract.methods.balanceOf(userAccount).call(),
-      ]);
-      availableBalanceLbl.textContent = (Number(raw) / 10 ** dec).toFixed(4);
+      const dec = +(await tokenContract.methods.decimals().call());
+      const raw = await tokenContract.methods.balanceOf(userAccount).call();
+      availableLbl.textContent = (Number(raw) / 10 ** dec).toFixed(4);
     } catch {
-      availableBalanceLbl.textContent = "Error";
+      availableLbl.textContent = "Error";
+    }
+  }
+
+  async function updateClaimable() {
+    const now = Math.floor(Date.now() / 1000),
+      elapsed = now - stakeTime;
+    let onchain = 0;
+    try {
+      const raw = await stakingContract.methods
+        .calculateReward(userAccount)
+        .call();
+      const dec = +(await tokenContract.methods.decimals().call());
+      onchain = Number(raw) / 10 ** dec;
+    } catch {}
+    const [, mult] = getTierAndMultiplier(+stakedLbl.textContent || 0);
+    const claimable =
+      elapsed >= INTERVAL
+        ? onchain
+        : (elapsed / INTERVAL) * BASE_DAILY_REWARD * mult;
+    claimableLbl.textContent = claimable.toFixed(4);
+    rewardBar.style.width = `${((claimable % 1) * 100).toFixed(2)}%`;
+    dailyRateLbl.textContent = (BASE_DAILY_REWARD * mult).toFixed(4);
+    claimBtn.disabled = elapsed < INTERVAL;
+  }
+
+  async function updateStakedInfo() {
+    let raw = "0",
+      ts = 0;
+    try {
+      raw = await stakingContract.methods.stakedBalanceOf(userAccount).call();
+      const s = await stakingContract.methods.stakes(userAccount).call();
+      ts = s.timestamp || s[1] || 0;
+    } catch {}
+    stakeTime = ts;
+    const dec = +(await tokenContract.methods.decimals().call());
+    const staked = Number(raw) / 10 ** dec;
+    stakedLbl.textContent = staked.toFixed(4);
+
+    // stake age
+    if (ts) {
+      const elapsed = Math.floor(Date.now() / 1000) - ts,
+        d = Math.floor(elapsed / 86400),
+        h = Math.floor((elapsed % 86400) / 3600);
+      stakeAgeLbl.textContent = `${d}d ${h}h`;
+    } else {
+      stakeAgeLbl.textContent = "0h";
+    }
+
+    // countdown bar
+    try {
+      const lastUpd = await stakingContract.methods.lastUpdateTime().call();
+      startCountdown(lastUpd);
+    } catch {}
+
+    // pool stats
+    const totalRaw = await stakingContract.methods.totalStaked().call();
+    const total = Number(totalRaw) / 10 ** dec;
+    totalStakedLbl.textContent = total.toFixed(4);
+
+    const share = total > 0 ? ((staked / total) * 100).toFixed(2) : "0.00";
+    userShareLbl.textContent = share + "%";
+
+    const rawRate = await stakingContract.methods.rewardRate().call();
+    const rate = Number(rawRate) / 10 ** dec;
+    const apr =
+      total > 0 ? (((rate * 86400 * 365) / total) * 100).toFixed(2) : "0.00";
+    aprLbl.textContent = apr + "%";
+
+    // tier & estimated reward
+    const [tier, mult] = getTierAndMultiplier(staked);
+    multiplierLbl.textContent = mult.toFixed(1);
+    estimatedLbl.textContent = (BASE_DAILY_REWARD * mult).toFixed(4);
+    document.getElementById("tierLabel").textContent = tier;
+    feedbackDiv.style.display = staked > 0 ? "block" : "none";
+
+    // next tier threshold
+    let nextThreshold = 50;
+    if (staked >= 50 && staked < 250) nextThreshold = 250;
+    else if (staked >= 250 && staked < 500) nextThreshold = 500;
+    else if (staked >= 500 && staked < 1000) nextThreshold = 1000;
+    nextTierLbl.textContent = nextThreshold;
+    const pct =
+      staked >= nextThreshold
+        ? 100
+        : ((staked / nextThreshold) * 100).toFixed(2);
+    tierBar.style.width = `${pct}%`;
+
+    // emergency unstake fee (example 1%)
+    unstakeFeeLbl.textContent = "1%";
+  }
+
+  async function updateClaimHistory() {
+    try {
+      const events = await stakingContract.getPastEvents("RewardPaid", {
+        filter: { user: userAccount },
+        fromBlock: 0,
+        toBlock: "latest",
+      });
+      const last5 = events.slice(-5).reverse();
+      historyTbody.innerHTML = "";
+      last5.forEach((evt) => {
+        const d = new Date(evt.returnValues.timestamp * 1000).toLocaleString();
+        const amt = (Number(evt.returnValues.reward) / 10 ** 18).toFixed(4);
+        historyTbody.insertAdjacentHTML(
+          "beforeend",
+          `<tr><td>${d}</td><td>${amt}</td></tr>`
+        );
+      });
+    } catch {
+      historyTbody.innerHTML = "<tr><td colspan='2'>Error</td></tr>";
     }
   }
 
   // ─────── ACTIONS ─────────────────────────────────────────────────────────────
   async function connectWallet() {
     try {
-      const accounts = await window.ethereum.request({
+      const accs = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      userAccount = accounts[0];
-      enableEthereumButton.textContent =
+      userAccount = accs[0];
+      connectBtn.textContent =
         userAccount.slice(0, 6) + "…" + userAccount.slice(-4);
-      walletAddressLabel.innerHTML = `Wallet: <code>${userAccount}</code>`;
-      document.getElementById("stakingWallet").textContent = userAccount;
+      walletAddrLbl.innerHTML = `<code>${userAccount}</code>`;
+      stakingWalletLbl.textContent = userAccount;
+      successMsg.textContent = "Wallet connected!";
+      successMsg.classList.add("text-success");
 
-      await updateBalance();
-      await updateStakedInfo();
-      await updateClaimable();
+      await Promise.all([
+        updateGasEstimate(),
+        updateBalance(),
+        updateStakedInfo(),
+        updateClaimable(),
+        updateClaimHistory(),
+      ]);
 
-      if (refreshInterval) clearInterval(refreshInterval);
-      refreshInterval = setInterval(() => {
+      clearInterval(refreshHandle);
+      refreshHandle = setInterval(() => {
         updateBalance();
         updateStakedInfo();
         updateClaimable();
       }, 1000);
-
-      successMessage.textContent = "Wallet connected!";
-      successMessage.classList.add("text-success");
     } catch (e) {
-      console.error("Connect error:", e);
+      console.error("Connect failed:", e);
     }
   }
 
-  async function stakeTokens() {
-    stakingStatus.textContent = "⏳ Staking…";
-    try {
-      const amt = parseFloat(document.getElementById("stakeAmount").value);
-      if (!amt || amt <= 0) throw new Error("Invalid amount");
-      const dec = Number(await tokenContract.methods.decimals().call());
-      const value = web3.utils.toBN((amt * 10 ** dec).toString());
+  connectBtn.addEventListener("click", connectWallet);
 
+  stakeBtn.addEventListener("click", async () => {
+    try {
+      const amt = parseFloat(stakeInput.value || 0);
+      if (!amt || amt <= 0) throw new Error("Invalid amount");
+      const dec = +(await tokenContract.methods.decimals().call());
+      const val = web3.utils.toBN((amt * 10 ** dec).toString());
       await tokenContract.methods
-        .approve(stakingAddress, value)
+        .approve(stakingAddress, val)
         .send({ from: userAccount });
-      await stakingContract.methods.stake(value).send({ from: userAccount });
-
-      stakingStatus.textContent = `✅ Staked ${amt} XEAM`;
-      await updateBalance();
-      await updateStakedInfo();
-      await updateClaimable();
+      await stakingContract.methods.stake(val).send({ from: userAccount });
+      await Promise.all([
+        updateBalance(),
+        updateStakedInfo(),
+        updateClaimable(),
+        updateClaimHistory(),
+      ]);
     } catch (e) {
-      console.error("Stake error:", e);
-      stakingStatus.textContent = `❌ ${e.message}`;
+      console.error("Stake failed:", e);
     }
-  }
+  });
 
-  async function unstakeTokens() {
-    stakingStatus.textContent = "⏳ Unstaking…";
+  unstakeBtn.addEventListener("click", async () => {
     try {
-      const amt = parseFloat(document.getElementById("stakeAmount").value);
-      if (!amt || amt <= 0) throw new Error("Invalid amount");
-      const dec = Number(await tokenContract.methods.decimals().call());
-      const value = web3.utils.toBN((amt * 10 ** dec).toString());
-      const rawSt = await stakingContract.methods
-        .stakedBalanceOf(userAccount)
-        .call();
-
-      if (value.gt(web3.utils.toBN(rawSt)))
-        throw new Error(
-          `Only ${(Number(rawSt) / 10 ** dec).toFixed(4)} XEAM staked`
-        );
-
-      await stakingContract.methods.unstake(value).send({ from: userAccount });
-
-      stakingStatus.textContent = `✅ Unstaked ${amt} XEAM`;
-      await updateBalance();
-      await updateStakedInfo();
-      await updateClaimable();
+      const amt = parseFloat(stakeInput.value || 0);
+      const dec = +(await tokenContract.methods.decimals().call());
+      const val = web3.utils.toBN((amt * 10 ** dec).toString());
+      await stakingContract.methods.unstake(val).send({ from: userAccount });
+      await Promise.all([
+        updateBalance(),
+        updateStakedInfo(),
+        updateClaimable(),
+        updateClaimHistory(),
+      ]);
     } catch (e) {
-      console.error("Unstake error:", e);
-      stakingStatus.textContent = `❌ ${e.message}`;
+      console.error("Unstake failed:", e);
     }
-  }
+  });
 
-  async function claimTokens() {
-    claimStatus.textContent = "⏳ Checking rewards…";
-    await updateClaimable();
-
-    const claimable = parseFloat(claimableAmountLbl.textContent);
-    if (claimable <= 0) {
-      claimStatus.textContent = "ℹ️ No rewards available to claim.";
-      return;
-    }
-
+  claimBtn.addEventListener("click", async () => {
     try {
-      claimStatus.textContent = "⏳ Claiming rewards…";
+      await updateClaimable();
+      const claimable = parseFloat(claimableLbl.textContent);
+      if (claimable <= 0) {
+        document.getElementById("claimStatus").textContent =
+          "ℹ️ No rewards available.";
+        return;
+      }
       await stakingContract.methods.claimRewards().send({ from: userAccount });
-
-      claimStatus.textContent = "✅ Tokens claimed successfully!";
-      await updateBalance();
-      await updateStakedInfo();
-      await updateClaimable();
-      stakeTimestamp = Math.floor(Date.now() / 1000);
+      document.getElementById("claimStatus").textContent =
+        "✅ Claimed successfully!";
+      stakeTime = Math.floor(Date.now() / 1000);
+      await Promise.all([
+        updateBalance(),
+        updateStakedInfo(),
+        updateClaimable(),
+        updateClaimHistory(),
+      ]);
     } catch (e) {
       console.error("Claim failed:", e);
-      claimStatus.textContent = `❌ ${e.message}`;
+      document.getElementById("claimStatus").textContent = "❌ Claim error.";
     }
-  }
-
-  // ─────── HOOK UP UI ───────────────────────────────────────────────────────────
-  enableEthereumButton.addEventListener("click", connectWallet);
-  stakeBtn.addEventListener("click", stakeTokens);
-  unstakeBtn.addEventListener("click", unstakeTokens);
-  claimBtn.addEventListener("click", claimTokens);
+  });
 });
